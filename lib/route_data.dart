@@ -1,20 +1,20 @@
 class RouteData {
-  final List<Route> routes;
+  final List<BusRoute> routes;
 
   RouteData({this.routes});
 
   factory RouteData.fromJson(Map<String, dynamic> json) {
     var routesFromJson = json['routes'] as List;
 
-    List<Route> routesList = routesFromJson.map((i) => 
-    Route.fromJson(i)).toList();
+    List<BusRoute> routesList = routesFromJson.map((i) => 
+    BusRoute.fromJson(i)).toList();
 
     return RouteData(
         routes: routesList);
   }
 }
 
-class Route {
+class BusRoute {
   final int id;
   final String number;
   final String name;
@@ -23,7 +23,7 @@ class Route {
   final List<RouteCoordinates> routeCoordinates;
   final bool active;
 
-  Route(
+  BusRoute(
       {this.id,
       this.number,
       this.name,
@@ -32,14 +32,14 @@ class Route {
       this.routeCoordinates,
       this.active});
 
-  factory Route.fromJson(Map<String, dynamic> json) {
+  factory BusRoute.fromJson(Map<String, dynamic> json) {
 
     var routeCoordinatesFromJson = json['RouteCoordinates'] as List;
 
     List<RouteCoordinates> routeCoordinatesList = routeCoordinatesFromJson.map((i) => 
     RouteCoordinates.fromJson(i)).toList();
 
-    return Route(
+    return BusRoute(
       id: json['Id'],
       number: json['Number'],
       name: json['Name'],

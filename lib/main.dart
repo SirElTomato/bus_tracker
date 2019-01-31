@@ -107,45 +107,10 @@ class HomePageState extends State<HomePage> {
 
   SingleChildScrollView _buildRouteSelector() {
     if (_routeData != null) {
-      GridTile selectAllTile = new GridTile(
-        child: InkResponse(
-            enableFeedback: true,
-            onTap: () => _handleRouteClicked("All"),
-            // onLongPress: , TODO: show route on map
-            child: Container(
-              child: Center(
-                  child: Text("All",
-                      style: TextStyle(color: Colors.white, fontSize: 24))),
-              width: 220,
-              height: 88,
-              margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
-              decoration: new BoxDecoration(
-                  color: Color(0xffb70005),
-                  borderRadius: BorderRadius.all(const Radius.circular(100))),
-            )),
-      );
+      GridTile selectAllTile = _createRouteTile("All", Color(0xffb70005), 220, 88);
 
-      List<GridTile> routeRows = _routeData.routes
-          .map((route) => new GridTile(
-                  child: InkResponse(
-                enableFeedback: true,
-                onTap: () => _handleRouteClicked(route.number),
-                // onLongPress: , TODO: show route on map
-                child: Container(
-                  child: Center(
-                      child: Text(route.number,
-                          style: TextStyle(color: Colors.white, fontSize: 24))),
-                  // color: Colors.red,
-                  width: 98,
-                  height: 98,
-                  margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
-                  decoration: new BoxDecoration(
-                      color: HexColor(route.colour),
-                      borderRadius:
-                          BorderRadius.all(const Radius.circular(50))),
-                ),
-              )))
-          .toList();
+      List<GridTile> routeRows =
+          _routeData.routes.map((route) => _createRouteTile(route.number, HexColor(route.colour), 98, 98)).toList();
       routeRows.insert(0, selectAllTile);
 
       return new SingleChildScrollView(
@@ -156,6 +121,27 @@ class HomePageState extends State<HomePage> {
       fetchRouteData();
       _buildRouteSelector();
     }
+  }
+
+  GridTile _createRouteTile(String routeName, Color color, double width, double height) {
+    return new GridTile(
+        child: InkResponse(
+      enableFeedback: true,
+      onTap: () => _handleRouteClicked(routeName),
+      // onLongPress: , TODO: show route on map
+      child: Container(
+        child: Center(
+            child: Text(routeName,
+                style: TextStyle(color: Colors.white, fontSize: 24))),
+        // color: Colors.red
+        width: width,
+        height: height,
+        margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+        decoration: new BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(const Radius.circular(50))),
+      ),
+    ));
   }
 
   void _handleRouteClicked(String route) {
