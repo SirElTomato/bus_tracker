@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_cs_cache/flutter_cs_cache.dart';
 import 'bus_data.dart';
 import 'route_data.dart';
+import 'extensions.dart';
 
 void main() => runApp(MyApp());
 
@@ -104,22 +105,61 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  ListView _buildRouteSelector() {
+  SingleChildScrollView _buildRouteSelector() {
     if (_routeData != null) {
-      Set<ListTile> routeRows = _routeData.routes
-          .map((route) => new ListTile(
-              title: Text(route.number), trailing: new Icon((Icons.favorite))))
-          .toSet();
+      GridTile selectAllTile = new GridTile(
+        child: InkResponse(
+            enableFeedback: true,
+            onTap: () => _handleRouteClicked("All"),
+            // onLongPress: , TODO: show route on map
+            child: Container(
+              child: Center(
+                  child: Text("All",
+                      style: TextStyle(color: Colors.white, fontSize: 24))),
+              width: 220,
+              height: 88,
+              margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+              decoration: new BoxDecoration(
+                  color: Color(0xffb70005),
+                  borderRadius: BorderRadius.all(const Radius.circular(100))),
+            )),
+      );
 
-      return new ListView(children: routeRows.toList());
+      List<GridTile> routeRows = _routeData.routes
+          .map((route) => new GridTile(
+                  child: InkResponse(
+                enableFeedback: true,
+                onTap: () => _handleRouteClicked(route.number),
+                // onLongPress: , TODO: show route on map
+                child: Container(
+                  child: Center(
+                      child: Text(route.number,
+                          style: TextStyle(color: Colors.white, fontSize: 24))),
+                  // color: Colors.red,
+                  width: 98,
+                  height: 98,
+                  margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+                  decoration: new BoxDecoration(
+                      color: HexColor(route.colour),
+                      borderRadius:
+                          BorderRadius.all(const Radius.circular(50))),
+                ),
+              )))
+          .toList();
+      routeRows.insert(0, selectAllTile);
+
+      return new SingleChildScrollView(
+          child: new Wrap(
+        children: routeRows.toList(),
+      ));
+    } else {
+      fetchRouteData();
+      _buildRouteSelector();
     }
   }
 
-  Widget _buildRouteRow(String busNumber) {
-    return ListTile(
-      title: Text(busNumber, style: const TextStyle(fontSize: 18.0)),
-      trailing: new Icon(Icons.favorite),
-    );
+  void _handleRouteClicked(String route) {
+    debugPrint(route);
   }
 
   void _selectRoutesPage() {
