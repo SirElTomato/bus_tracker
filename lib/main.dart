@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_cs_cache/flutter_cs_cache.dart';
 import 'bus_data.dart';
 import 'route_data.dart';
 
@@ -32,32 +33,9 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   GoogleMapController mapController;
   BusData _busData;
-  List<String> routes = [
-    "1",
-    "1a",
-    "1g",
-    "2",
-    "2a",
-    "3",
-    "4",
-    "4a",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "12",
-    "12a",
-    "13",
-    "15",
-    "16",
-    "19",
-    "20",
-    "21",
-    "22",
-    "x22",
-    "23"
-  ];
+  RouteData _routeData;
+
+  final CsCache cache = new CsCache();
 
   @override
   Widget build(BuildContext context) {
@@ -100,24 +78,41 @@ class HomePageState extends State<HomePage> {
 
   // route stuff
   void fetchRouteData() async {
-    final response = await http.get(
-        'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
-    if (response.statusCode == 200) {
-      RouteData routeData = RouteData.fromJson(json.decode(response.body));
-      var route = routeData;
-      // _busData = busData;
+    String cacheKey = "routeData";
+    String cacheEntry = cache.getKey(key: cacheKey);
+
+    if (cacheEntry == null) {
+      final response = await http.get(
+          'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
+
+      if (response.statusCode == 200) {
+        RouteData routeData = RouteData.fromJson(json.decode(response.body));
+        _routeData = routeData;
+        cache.setKey(
+            key: cacheKey,
+            value: response.body,
+            expireOn: DateTime.now()
+                .add(new Duration(seconds: 604800))
+                .millisecondsSinceEpoch);
+        setState(() {});
+      } else {
+        throw Exception('Failed to get bus data');
+      }
     } else {
-      throw Exception('Failed to get bus data');
+      RouteData routeData = RouteData.fromJson(json.decode(cacheEntry));
+      _routeData = routeData;
     }
   }
 
   ListView _buildRouteSelector() {
-    Set<ListTile> routeRows = routes
-        .map((route) => new ListTile(
-            title: Text(route), trailing: new Icon((Icons.favorite))))
-        .toSet();
+    if (_routeData != null) {
+      Set<ListTile> routeRows = _routeData.routes
+          .map((route) => new ListTile(
+              title: Text(route.number), trailing: new Icon((Icons.favorite))))
+          .toSet();
 
-    return new ListView(children: routeRows.toList());
+      return new ListView(children: routeRows.toList());
+    }
   }
 
   Widget _buildRouteRow(String busNumber) {
@@ -128,16 +123,15 @@ class HomePageState extends State<HomePage> {
   }
 
   void _selectRoutesPage() {
+    fetchRouteData();
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          fetchRouteData();
           return new Scaffold(
-            appBar: new AppBar(
-              title: const Text('Select Routes'),
-            ),
-            body: _buildRouteSelector(),
-          );
+              appBar: new AppBar(
+                title: const Text('Select Routes'),
+              ),
+              body: _buildRouteSelector());
         },
       ),
     );
