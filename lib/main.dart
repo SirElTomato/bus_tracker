@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_cs_cache/flutter_cs_cache.dart';
 import 'bus_data.dart';
-import 'route_data.dart';
-import 'extensions.dart';
+import 'select_routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,9 +32,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   GoogleMapController mapController;
   BusData _busData;
-  RouteData _routeData;
 
-  final CsCache cache = new CsCache();
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,9 @@ class HomePageState extends State<HomePage> {
           title: Text(widget.title),
           actions: <Widget>[
             new IconButton(
-                icon: const Icon(Icons.list), onPressed: _selectRoutesPage)
+                icon: const Icon(Icons.list), onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SelectRoutesPage()));
+                })
           ],
         ),
         body: Center(
@@ -77,89 +76,128 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  // route stuff
-  void fetchRouteData() async {
-    String cacheKey = "routeData";
-    String cacheEntry = cache.getKey(key: cacheKey);
+ 
 
-    if (cacheEntry == null) {
-      final response = await http.get(
-          'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
+  // void _selectRoutesPage() {
+  //   fetchRouteData();
+  //   Navigator.of(context).push(
+  //     new MaterialPageRoute<void>(
+  //       builder: (BuildContext context) {
+  //         return new Scaffold(
+  //             appBar: new AppBar(
+  //               title: const Text('Select Routes'),
+  //             ),
+  //             body: _buildRouteSelector());
+  //       },
+  //     ),
+  //   );
+  // }
+}
 
-      if (response.statusCode == 200) {
-        RouteData routeData = RouteData.fromJson(json.decode(response.body));
-        _routeData = routeData;
-        cache.setKey(
-            key: cacheKey,
-            value: response.body,
-            expireOn: DateTime.now()
-                .add(new Duration(seconds: 604800))
-                .millisecondsSinceEpoch);
-        setState(() {});
-      } else {
-        throw Exception('Failed to get bus data');
-      }
-    } else {
-      RouteData routeData = RouteData.fromJson(json.decode(cacheEntry));
-      _routeData = routeData;
-    }
-  }
-
-  SingleChildScrollView _buildRouteSelector() {
-    if (_routeData != null) {
-      GridTile selectAllTile = _createRouteTile("All", Color(0xffb70005), 220, 88);
-
-      List<GridTile> routeRows =
-          _routeData.routes.map((route) => _createRouteTile(route.number, HexColor(route.colour), 98, 98)).toList();
-      routeRows.insert(0, selectAllTile);
-
-      return new SingleChildScrollView(
-          child: new Wrap(
-        children: routeRows.toList(),
-      ));
-    } else {
-      fetchRouteData();
-      _buildRouteSelector();
-    }
-  }
-
-  GridTile _createRouteTile(String routeName, Color color, double width, double height) {
-    return new GridTile(
-        child: InkResponse(
-      enableFeedback: true,
-      onTap: () => _handleRouteClicked(routeName),
-      // onLongPress: , TODO: show route on map
-      child: Container(
-        child: Center(
-            child: Text(routeName,
-                style: TextStyle(color: Colors.white, fontSize: 24))),
-        // color: Colors.red
-        width: width,
-        height: height,
-        margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
-        decoration: new BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.all(const Radius.circular(50))),
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
       ),
-    ));
-  }
-
-  void _handleRouteClicked(String route) {
-    debugPrint(route);
-  }
-
-  void _selectRoutesPage() {
-    fetchRouteData();
-    Navigator.of(context).push(
-      new MaterialPageRoute<void>(
-        builder: (BuildContext context) {
-          return new Scaffold(
-              appBar: new AppBar(
-                title: const Text('Select Routes'),
-              ),
-              body: _buildRouteSelector());
-        },
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// class RouteSelectorWidget extends StatefulWidget {
+//   @override
+//   _RouteSelectorWidgetState createState() => _RouteSelectorWidgetState();
+// }
+
+// class _RouteSelectorWidgetState extends State<RouteSelectorWidget> {
+//   bool _isSelected = true;
+//   final Set<String> _selectedRoutes = new Set<String>();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkResponse(
+//             enableFeedback: true,
+//             onTap: () => _handleRouteClicked(),
+//             // onLongPress: , TODO: show route on map
+//             child: Opacity(
+//               opacity: _isSelected ? 1 : 0.2,
+//               child: Container(
+//                 child: Center(
+//                     child: Text(routeName,
+//                         style: TextStyle(color: Colors.white, fontSize: 24))),
+//                 // color: Colors.red
+//                 width: width,
+//                 height: height,
+//                 margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+//                 decoration: new BoxDecoration(
+//                     color: HexColor(colorInHex),
+//                     borderRadius: BorderRadius.all(const Radius.circular(50))),
+//               ),
+//             ));
+//   }
+
+//   GridTile _createRouteSelectorWidget(
+//       String routeName, String colorInHex, double width, double height) {
+//     final bool selected = _selectedRoutes.contains(routeName);
+//     double opacity = selected ? 1.0 : 0.2;
+
+//     return new GridTile(
+//       child: RouteSelectorWidget(
+//       ),
+//     );
+
+//     return new GridTile(
+//         child: InkResponse(
+//             enableFeedback: true,
+//             onTap: () => _handleRouteClicked(routeName, selected),
+//             // onLongPress: , TODO: show route on map
+//             child: Opacity(
+//               opacity: opacity,
+//               child: Container(
+//                 child: Center(
+//                     child: Text(routeName,
+//                         style: TextStyle(color: Colors.white, fontSize: 24))),
+//                 // color: Colors.red
+//                 width: width,
+//                 height: height,
+//                 margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+//                 decoration: new BoxDecoration(
+//                     color: HexColor(colorInHex),
+//                     borderRadius: BorderRadius.all(const Radius.circular(50))),
+//               ),
+//             )));
+//   }
+
+//   void _handleRouteClicked(String route, bool selected) {
+//     setState(() {
+//       if (selected) {
+//        _isSelected = false;
+//         _selectedRoutes.remove(route);
+//       } else {
+//        _isSelected = true;
+//         _selectedRoutes.add(route);
+//       }
+//     });
+//   }
+
+// }
