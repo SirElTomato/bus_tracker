@@ -1,9 +1,8 @@
+import 'package:bus_tracker/extensions.dart';
+import 'package:bus_tracker/models/route_data.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'route_data.dart';
-import 'extensions.dart';
 import 'package:flutter_cs_cache/flutter_cs_cache.dart';
 
 class SelectRoutesPage extends StatefulWidget {
