@@ -38,7 +38,10 @@ class HomePageState extends State<HomePage> {
         body: Center(
           child: GoogleMap(
             onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(target: LatLng(0, 0)),
+            initialCameraPosition: CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
+            cameraTargetBounds: CameraTargetBounds(LatLngBounds(southwest: LatLng(49.11, -2.25), northeast: LatLng(49.31, -2.00))),
+            minMaxZoomPreference: MinMaxZoomPreference(11, null),
+            myLocationEnabled: true,
           ),
         ));
   }
