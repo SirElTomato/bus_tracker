@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'package:bus_tracker/models/bus_data.dart';
@@ -23,13 +24,12 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchBusData(); //TODO: Put this on a timer?
+    const oneSec = const Duration(seconds: 3);
+    new Timer.periodic(oneSec, (Timer t) => _fetchDataAndDrawMarkers());
   }
 
   @override
   Widget build(BuildContext context) {
-    _fetchBusData(); //TODO: Put this on a timer?
-    _updateBusMarkersOnMap();
 
     return Scaffold(
         appBar: AppBar(
@@ -60,9 +60,14 @@ class HomePageState extends State<HomePage> {
         ));
   }
 
+  void _fetchDataAndDrawMarkers() {
+    _fetchBusData();
+    _updateBusMarkersOnMap();
+  }
+
   void _fetchBusData() async {
     final response = await http.get(
-        'https://sojbuslivetimespublic.azurewebsites.net/api/Values/GetMin?secondsAgo=3600');
+        'https://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetMin?secondsAgo=3600');
     if (response.statusCode == 200) {
       BusData busData = BusData.fromJson(json.decode(response.body));
       _busData = busData;
@@ -84,7 +89,7 @@ class HomePageState extends State<HomePage> {
             position: LatLng(_busData.minimumInfoUpdates[i].lat,
                 _busData.minimumInfoUpdates[i].lon),
             infoWindowText: InfoWindowText(_busData.minimumInfoUpdates[i].line,
-                _busData.minimumInfoUpdates[i].bus));
+                _busData.minimumInfoUpdates[i].direction));
 
         if (_busMarkers.containsKey(_busData.minimumInfoUpdates[i].bus)) {
           await mapController.updateMarker(
@@ -95,14 +100,5 @@ class HomePageState extends State<HomePage> {
         }
       }
     }
-
-    // for (int i = 0; i < _busData.minimumInfoUpdates.length; i++) {
-    //   MarkerOptions markerOptions = MarkerOptions(
-    //       position: LatLng(_busData.minimumInfoUpdates[i].lat,
-    //           _busData.minimumInfoUpdates[i].lon));
-
-    //   Marker marker = await mapController.addMarker(markerOptions);
-    //   _busMarkers[_busData.minimumInfoUpdates[i].bus] = marker;
-    // }
   }
 }
