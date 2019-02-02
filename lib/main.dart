@@ -1,23 +1,36 @@
+import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/presentation/home_page.dart';
+import 'package:bus_tracker/redux/reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+
+// void main() => runApp(MyApp());
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
     checkPermissions();
-
-    return MaterialApp(
-      title: 'Island Mapper',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(title: 'Island Mapper'),
+    final Store<AppState> store = Store<AppState>(
+      appStateReducer,
+      initialState: AppState.initialState()
     );
+
+    return new StoreProvider<AppState>(
+      store: store,
+      child: new MaterialApp(
+        title: 'Island Mapper',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomePage(title: 'Island Mapper'),
+      ),
+    );
+
   }
 
   Future checkPermissions() async {

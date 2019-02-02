@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/models/bus_data.dart';
 import 'package:bus_tracker/presentation/select_routes_page.dart';
+import 'package:bus_tracker/view_models/home_page_view_model.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -30,7 +34,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -45,20 +48,39 @@ class HomePageState extends State<HomePage> {
                 })
           ],
         ),
-        body: Center(
-          child: GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition:
-                CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
-            cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-                southwest: LatLng(49.11, -2.25),
-                northeast: LatLng(49.31, -2.00))),
-            minMaxZoomPreference: MinMaxZoomPreference(11, null),
-            myLocationEnabled: true,
-            compassEnabled: true,
-          ),
+        body: StoreConnector<AppState, HomePageViewModel>(
+          converter: (Store<AppState> store) => HomePageViewModel.create(store),
+          builder: (BuildContext context, HomePageViewModel viewModel) =>
+              Center(
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(49.218360, -2.139824), zoom: 11),
+                  cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+                      southwest: LatLng(49.11, -2.25),
+                      northeast: LatLng(49.31, -2.00))),
+                  minMaxZoomPreference: MinMaxZoomPreference(11, null),
+                  myLocationEnabled: true,
+                  compassEnabled: true,
+                ),
+              ),
         ));
   }
+
+//previous body
+  // Center(
+  //         child: GoogleMap(
+  //           onMapCreated: _onMapCreated,
+  //           initialCameraPosition:
+  //               CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
+  //           cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+  //               southwest: LatLng(49.11, -2.25),
+  //               northeast: LatLng(49.31, -2.00))),
+  //           minMaxZoomPreference: MinMaxZoomPreference(11, null),
+  //           myLocationEnabled: true,
+  //           compassEnabled: true,
+  //         ),
+  //       )
 
   void _fetchDataAndDrawMarkers() {
     _fetchBusData();
