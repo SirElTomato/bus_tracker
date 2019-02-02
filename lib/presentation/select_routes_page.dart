@@ -32,10 +32,6 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
   Widget build(BuildContext context) {
     fetchRouteData();
 
-    List<GridTile> routeRows = new List<GridTile>();
-    GridTile selectAllTile = _createRouteTile("All", "#b70005", 220, 88);
-    routeRows.add(selectAllTile);
-
     return new StoreConnector<AppState, HomePageViewModel>(
         converter: (Store<AppState> store) => HomePageViewModel.create(store),
         builder: (BuildContext context, HomePageViewModel viewModel) =>
@@ -47,7 +43,7 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                   future: fetchRouteData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return _buildRouteSelector(snapshot.data);
+                      return _buildRouteSelector(viewModel, snapshot.data);
                     } else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
@@ -57,55 +53,37 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                 )));
   }
 
-  SingleChildScrollView _buildRouteSelector(RouteData routeData) {
-    if (_routeData != null) {
-      GridTile selectAllTile = _createRouteTile("All", "#b70005", 220, 88);
+  SingleChildScrollView _buildRouteSelector(HomePageViewModel viewModel, RouteData routeData) {
+    GridTile selectAllTile = _createRouteTile(viewModel, "All", "#b70005", 220, 88);
 
-      List<GridTile> routeRows = _routeData.routes
-          .map((route) => _createRouteTile(route.number, route.colour, 98, 98))
-          .toList();
-      routeRows.insert(0, selectAllTile);
+    List<GridTile> routeRows = _routeData.routes
+        .map((route) => _createRouteTile(viewModel, route.number, route.colour, 98, 98))
+        .toList();
+    routeRows.insert(0, selectAllTile);
 
-      return new SingleChildScrollView(
-          child: new Wrap(
-        children: routeRows.toList(),
-      ));
-    } else {}
+    return new SingleChildScrollView(
+        child: new Wrap(
+      children: routeRows.toList(),
+    ));
   }
 
-  // SingleChildScrollView _buildRouteSelector() {
-  //   if (_routeData != null) {
-  //     GridTile selectAllTile = _createRouteTile("All", "#b70005", 220, 88);
-
-  //     List<GridTile> routeRows = _routeData.routes
-  //         .map((route) => _createRouteTile(route.number, route.colour, 98, 98))
-  //         .toList();
-  //     routeRows.insert(0, selectAllTile);
-
-  //     return new SingleChildScrollView(
-  //         child: new Wrap(
-  //       children: routeRows.toList(),
-  //     ));
-  //   } else {
-  //     fetchRouteData();
-  //     _buildRouteSelector();
-  //   }
-  // }
-
-  // route stuff
   Future<RouteData> fetchRouteData() async {
     // String cacheKey = "routeData";
-    // String cacheEntry = cache.getKey(key: cacheKey);
+    // String cacheEntry = cache.getKey(key: cacheKey);_
 
-    final response = await http.get(
-        'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
+    if (_routeData == null) {
+      final response = await http.get(
+          'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
 
-    if (response.statusCode == 200) {
-      RouteData routeData = RouteData.fromJson(json.decode(response.body));
-      _routeData = routeData;
-      return routeData;
+      if (response.statusCode == 200) {
+        RouteData routeData = RouteData.fromJson(json.decode(response.body));
+        _routeData = routeData;
+        return routeData;
+      } else {
+        throw Exception('Failed to get bus data');
+      }
     } else {
-      throw Exception('Failed to get bus data');
+      return _routeData;
     }
 
     // if (cacheEntry == null) {
@@ -131,7 +109,7 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
     // }
   }
 
-  GridTile _createRouteTile(
+  GridTile _createRouteTile(HomePageViewModel viewModel,
       String routeName, String colorInHex, double width, double height) {
     final bool selected = _selectedRoutes.contains(routeName);
     double opacity = selected ? 1.0 : 0.2;
@@ -143,8 +121,10 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
               setState(() {
                 if (selected) {
                   _selectedRoutes.remove(routeName);
+                  viewModel.onRemoveSelectedRoute(routeName);
                 } else {
                   _selectedRoutes.add(routeName);
+                  viewModel.onAddSelectedRoute(routeName);
                 }
               });
             },
