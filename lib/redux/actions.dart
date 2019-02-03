@@ -15,3 +15,11 @@ class RemoveSelectedRouteAction {
 class RemoveAllSelectedRoutesAction {}
 
 class AddAllSelectedRoutesAction {}
+
+class GetSelectedRoutesAction {}
+
+class LoadedSelectedRoutesAction {
+  final List<SelectedRoute> selectedRoutes;
+
+  LoadedSelectedRoutesAction(this.selectedRoutes);
+}

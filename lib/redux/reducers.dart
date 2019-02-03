@@ -11,8 +11,8 @@ List<SelectedRoute> selectedRouteReducer(List<SelectedRoute> state, action) {
     return []
       ..addAll(state)
       ..add(SelectedRoute(name: action.routeName));
-  } 
-  
+  }
+
   if (action is RemoveSelectedRouteAction) {
     return List.unmodifiable(List.from(state)..remove(action.routeName));
   }
@@ -21,24 +21,9 @@ List<SelectedRoute> selectedRouteReducer(List<SelectedRoute> state, action) {
     return List.unmodifiable([]);
   }
 
+  if (action is LoadedSelectedRoutesAction) {
+    return action.selectedRoutes;
+  }
+
   return state;
 }
-
-// List<SelectedRoute> appReducers(List<SelectedRoute> routes, dynamic action) {
-//   if (action is AddSelectedRouteAction) {
-//     return addRoute(routes, action);
-//   } else if (action is RemoveSelectedRouteAction) {
-//     return removeRoute(routes, action);
-//   }
-//   return routes;
-// }
-
-// List<SelectedRoute> addRoute(
-//     List<SelectedRoute> routes, AddSelectedRouteAction action) {
-//   return List.from(routes)..add(action.route);
-// }
-
-// List<SelectedRoute> removeRoute(
-//     List<SelectedRoute> routes, RemoveSelectedRouteAction action) {
-//   return List.from(routes)..add(action.route);
-// }
