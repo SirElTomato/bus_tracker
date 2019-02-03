@@ -12,9 +12,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
-
   final String title;
+  final Store<AppState> store;
+
+  HomePage({Key key, this.title, this.store}) : super(key: key);
+
 
   @override
   State createState() => HomePageState();
@@ -28,7 +30,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    const oneSec = const Duration(seconds: 3);
+    const oneSec = const Duration(milliseconds: 3600);
     new Timer.periodic(oneSec, (Timer t) => _fetchDataAndDrawMarkers());
   }
 
@@ -67,21 +69,6 @@ class HomePageState extends State<HomePage> {
         ));
   }
 
-//previous body
-  // Center(
-  //         child: GoogleMap(
-  //           onMapCreated: _onMapCreated,
-  //           initialCameraPosition:
-  //               CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
-  //           cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-  //               southwest: LatLng(49.11, -2.25),
-  //               northeast: LatLng(49.31, -2.00))),
-  //           minMaxZoomPreference: MinMaxZoomPreference(11, null),
-  //           myLocationEnabled: true,
-  //           compassEnabled: true,
-  //         ),
-  //       )
-
   void _fetchDataAndDrawMarkers() {
     _fetchBusData();
     _updateBusMarkersOnMap();
@@ -106,6 +93,8 @@ class HomePageState extends State<HomePage> {
 
   Future _updateBusMarkersOnMap() async {
     if (_busData != null) {
+      // for (int i = 0; i < s)
+
       for (int i = 0; i < _busData.minimumInfoUpdates.length; i++) {
         MarkerOptions markerOptions = MarkerOptions(
             position: LatLng(_busData.minimumInfoUpdates[i].lat,

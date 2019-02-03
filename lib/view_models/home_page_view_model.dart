@@ -4,8 +4,8 @@ import 'package:redux/redux.dart';
 
 class HomePageViewModel {
   final List<SelectedRoute> selectedRoutes;
-  final Function(String) onAddSelectedRoute;
-  final Function(String) onRemoveSelectedRoute;
+  final Function(SelectedRoute) onAddSelectedRoute;
+  final Function(SelectedRoute) onRemoveSelectedRoute;
   final Function() onRemoveAllSelectedRoutes;
 
   HomePageViewModel({
@@ -16,11 +16,11 @@ class HomePageViewModel {
   });
 
   factory HomePageViewModel.create(Store<AppState> store) {
-    _onAddSelectedRoute(String routeName) {
+    _onAddSelectedRoute(SelectedRoute routeName) {
       store.dispatch(AddSelectedRouteAction(routeName));
     }
 
-    _onRemoveSelectedRoute(String routeName) {
+    _onRemoveSelectedRoute(SelectedRoute routeName) {
       store.dispatch(RemoveSelectedRouteAction(routeName));
     }
 

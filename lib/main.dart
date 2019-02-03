@@ -1,10 +1,12 @@
 import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/presentation/home_page.dart';
+import 'package:bus_tracker/redux/actions.dart';
 import 'package:bus_tracker/redux/reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:bus_tracker/redux/middleware.dart';
 
 // void main() => runApp(MyApp());
 
@@ -17,7 +19,8 @@ class MyApp extends StatelessWidget {
     checkPermissions();
     final Store<AppState> store = Store<AppState>(
       appStateReducer,
-      initialState: AppState.initialState()
+      initialState: AppState.initialState(),
+      middleware: [appStateMiddleware],
     );
 
     return new StoreProvider<AppState>(
@@ -27,10 +30,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(title: 'Island Mapper'),
+        home: StoreBuilder<AppState>(
+          onInit: (store) => store.dispatch(GetSelectedRoutesAction()),
+          builder: (BuildContext context, Store<AppState> store) =>
+              HomePage(title: 'Island Mapper', store: store,),
+        ),
       ),
     );
-
   }
 
   Future checkPermissions() async {

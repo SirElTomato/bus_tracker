@@ -1,15 +1,17 @@
 import 'package:bus_tracker/models/app_state.dart';
 
 class AddSelectedRouteAction {
-  final String routeName;
+  // final String routeName;
+  final SelectedRoute selectedRoute;
 
-  AddSelectedRouteAction(this.routeName);
+  AddSelectedRouteAction(this.selectedRoute);
 }
 
 class RemoveSelectedRouteAction {
-  final String routeName;
+  // final String routeName;
+  final SelectedRoute selectedRoute;
 
-  RemoveSelectedRouteAction(this.routeName);
+  RemoveSelectedRouteAction(this.selectedRoute);
 }
 
 class RemoveAllSelectedRoutesAction {}

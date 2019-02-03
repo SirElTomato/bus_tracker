@@ -10,17 +10,17 @@ import 'dart:convert';
 import 'package:redux/redux.dart';
 
 class SelectRoutesPage extends StatefulWidget {
-  SelectRoutesPage({Key key, this.title}) : super(key: key);
-
   final String title;
+  final Store<AppState> store;
+
+  SelectRoutesPage({Key key, this.title, this.store}) : super(key: key);
+
   @override
   State createState() => SelectRoutesPageState();
 }
 
 class SelectRoutesPageState extends State<SelectRoutesPage> {
-  // final CsCache cache = new CsCache();
   RouteData _routeData;
-  Set<String> _selectedRoutes = new Set<String>();
 
   @override
   void initState() {
@@ -39,25 +39,34 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                 appBar: new AppBar(
                   title: const Text('Select Routes'),
                 ),
-                body: FutureBuilder<RouteData>(
-                  future: fetchRouteData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return _buildRouteSelector(viewModel, snapshot.data);
-                    } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                    }
+                body: StoreConnector<AppState, HomePageViewModel>(
+                    converter: (Store<AppState> store) =>
+                        HomePageViewModel.create(store),
+                    builder:
+                        (BuildContext context, HomePageViewModel viewModel) =>
+                            FutureBuilder<RouteData>(
+                              future: fetchRouteData(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return _buildRouteSelector(
+                                      viewModel, snapshot.data);
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
+                                }
 
-                    return CircularProgressIndicator();
-                  },
-                )));
+                                return CircularProgressIndicator();
+                              },
+                            ))));
   }
 
-  SingleChildScrollView _buildRouteSelector(HomePageViewModel viewModel, RouteData routeData) {
-    GridTile selectAllTile = _createRouteTile(viewModel, "All", "#b70005", 220, 88);
+  SingleChildScrollView _buildRouteSelector(
+      HomePageViewModel viewModel, RouteData routeData) {
+    GridTile selectAllTile =
+        _createRouteTile(viewModel, "All", "#b70005", 220, 88);
 
     List<GridTile> routeRows = _routeData.routes
-        .map((route) => _createRouteTile(viewModel, route.number, route.colour, 98, 98))
+        .map((route) =>
+            _createRouteTile(viewModel, route.number, route.colour, 98, 98))
         .toList();
     routeRows.insert(0, selectAllTile);
 
@@ -68,8 +77,6 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
   }
 
   Future<RouteData> fetchRouteData() async {
-    // String cacheKey = "routeData";
-    // String cacheEntry = cache.getKey(key: cacheKey);_
 
     if (_routeData == null) {
       final response = await http.get(
@@ -85,46 +92,25 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
     } else {
       return _routeData;
     }
-
-    // if (cacheEntry == null) {
-    //   final response = await http.get(
-    //       'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
-
-    //   if (response.statusCode == 200) {
-    //     RouteData routeData = RouteData.fromJson(json.decode(response.body));
-    //     _routeData = routeData;
-    //     cache.setKey(
-    //         key: cacheKey,
-    //         value: response.body,
-    //         expireOn: DateTime.now()
-    //             .add(new Duration(seconds: 604800))
-    //             .millisecondsSinceEpoch);
-    //     setState(() {});
-    //   } else {
-    //     throw Exception('Failed to get bus data');
-    //   }
-    // } else {
-    //   RouteData routeData = RouteData.fromJson(json.decode(cacheEntry));
-    //   _routeData = routeData;
-    // }
   }
 
-  GridTile _createRouteTile(HomePageViewModel viewModel,
-      String routeName, String colorInHex, double width, double height) {
-    final bool selected = _selectedRoutes.contains(routeName);
-    double opacity = selected ? 1.0 : 0.2;
+  GridTile _createRouteTile(HomePageViewModel viewModel, String routeName,
+      String colorInHex, double width, double height) {
+      
+    final bool alreadySelected =
+        viewModel.selectedRoutes.where((x) => x.name == routeName).length == 1;
+    double opacity = alreadySelected ? 1.0 : 0.2;
 
     return new GridTile(
         child: InkResponse(
             enableFeedback: true,
             onTap: () {
               setState(() {
-                if (selected) {
-                  _selectedRoutes.remove(routeName);
-                  viewModel.onRemoveSelectedRoute(routeName);
+                if (alreadySelected) {
+                  viewModel.onRemoveSelectedRoute(viewModel.selectedRoutes
+                      .singleWhere((x) => x.name == routeName));
                 } else {
-                  _selectedRoutes.add(routeName);
-                  viewModel.onAddSelectedRoute(routeName);
+                  viewModel.onAddSelectedRoute(SelectedRoute(name: routeName));
                 }
               });
             },
@@ -135,7 +121,6 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                 child: Center(
                     child: Text(routeName,
                         style: TextStyle(color: Colors.white, fontSize: 24))),
-                // color: Colors.red
                 width: width,
                 height: height,
                 margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
@@ -144,15 +129,5 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                     borderRadius: BorderRadius.all(const Radius.circular(50))),
               ),
             )));
-  }
-
-  void _handleRouteClicked(String route, bool selected) {
-    setState(() {
-      if (selected) {
-        _selectedRoutes.remove(route);
-      } else {
-        _selectedRoutes.add(route);
-      }
-    });
   }
 }

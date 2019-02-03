@@ -10,11 +10,11 @@ List<SelectedRoute> selectedRouteReducer(List<SelectedRoute> state, action) {
   if (action is AddSelectedRouteAction) {
     return []
       ..addAll(state)
-      ..add(SelectedRoute(name: action.routeName));
+      ..add(action.selectedRoute);
   }
 
   if (action is RemoveSelectedRouteAction) {
-    return List.unmodifiable(List.from(state)..remove(action.routeName));
+    return List.unmodifiable(List.from(state)..remove(action.selectedRoute));
   }
 
   if (action is RemoveAllSelectedRoutesAction) {
