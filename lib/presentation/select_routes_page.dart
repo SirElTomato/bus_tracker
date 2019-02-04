@@ -59,29 +59,10 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                             ))));
   }
 
-  SingleChildScrollView _buildRouteSelector(
-      HomePageViewModel viewModel, RouteData routeData) {
-    GridTile selectAllTile =
-        _createRouteTile(viewModel, "All", "#b70005", 220, 88);
-
-    List<GridTile> routeRows = _routeData.routes
-        .map((route) =>
-            _createRouteTile(viewModel, route.number, route.colour, 98, 98))
-        .toList();
-    routeRows.insert(0, selectAllTile);
-
-    return new SingleChildScrollView(
-        child: new Wrap(
-      children: routeRows.toList(),
-    ));
-  }
-
   Future<RouteData> fetchRouteData() async {
-
     if (_routeData == null) {
       final response = await http.get(
           'http://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetRoutes');
-
       if (response.statusCode == 200) {
         RouteData routeData = RouteData.fromJson(json.decode(response.body));
         _routeData = routeData;
@@ -94,19 +75,46 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
     }
   }
 
-  GridTile _createRouteTile(HomePageViewModel viewModel, String routeName,
-      String colorInHex, double width, double height) {
-      
+  SingleChildScrollView _buildRouteSelector(
+      HomePageViewModel viewModel, RouteData routeData) {
+    GridTile selectAllTile =
+        _createRouteTile(viewModel, routeData, "All", "#b70005", 220, 88);
+
+    List<GridTile> routeRows = _routeData.routes
+        .map((route) => _createRouteTile(
+            viewModel, routeData, route.number, route.colour, 98, 98))
+        .toList();
+    routeRows.insert(0, selectAllTile);
+
+    return new SingleChildScrollView(
+        child: new Wrap(
+      children: routeRows.toList(),
+    ));
+  }
+
+  GridTile _createRouteTile(HomePageViewModel viewModel, RouteData routeData,
+      String routeName, String colorInHex, double width, double height) {
     final bool alreadySelected =
         viewModel.selectedRoutes.where((x) => x.name == routeName).length == 1;
-    double opacity = alreadySelected ? 1.0 : 0.2;
+    final bool allSelected =
+        viewModel.selectedRoutes.length == routeData.routes.length;
+    // final bool allDeselected =
+    double opacity = (alreadySelected || allSelected) ? 1.0 : 0.2;
 
     return new GridTile(
         child: InkResponse(
             enableFeedback: true,
             onTap: () {
               setState(() {
-                if (alreadySelected) {
+                if (routeName == "All" && !allSelected) {
+                    viewModel.onRemoveAllSelectedRoutes();
+                  for (int i = 0; i < routeData.routes.length; i++) {
+                    viewModel.onAddSelectedRoute(
+                        SelectedRoute(name: routeData.routes[i].number));
+                  }
+                } else if (routeName == "All" && allSelected) {
+                  viewModel.onRemoveAllSelectedRoutes();
+                } else if (alreadySelected || allSelected) {
                   viewModel.onRemoveSelectedRoute(viewModel.selectedRoutes
                       .singleWhere((x) => x.name == routeName));
                 } else {
