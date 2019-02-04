@@ -17,14 +17,13 @@ class HomePage extends StatefulWidget {
 
   HomePage({Key key, this.title, this.store}) : super(key: key);
 
-
   @override
   State createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
   GoogleMapController mapController;
-  BusData _busData;
+  List<SelectedRoute> _selectedRoutes;
   HashMap<String, Marker> _busMarkers = new HashMap<String, Marker>();
 
   @override
@@ -53,36 +52,25 @@ class HomePageState extends State<HomePage> {
         body: StoreConnector<AppState, HomePageViewModel>(
           converter: (Store<AppState> store) => HomePageViewModel.create(store),
           builder: (BuildContext context, HomePageViewModel viewModel) =>
-              Center(
-                child: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                      target: LatLng(49.218360, -2.139824), zoom: 11),
-                  cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-                      southwest: LatLng(49.11, -2.25),
-                      northeast: LatLng(49.31, -2.00))),
-                  minMaxZoomPreference: MinMaxZoomPreference(11, null),
-                  myLocationEnabled: true,
-                  compassEnabled: true,
-                ),
-              ),
+              _buildMap(viewModel),
         ));
   }
 
-  void _fetchDataAndDrawMarkers() {
-    _fetchBusData();
-    _updateBusMarkersOnMap();
-  }
+  Center _buildMap(HomePageViewModel viewModel) {
+    _selectedRoutes = viewModel.selectedRoutes;
 
-  void _fetchBusData() async {
-    final response = await http.get(
-        'https://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetMin?secondsAgo=3600');
-    if (response.statusCode == 200) {
-      BusData busData = BusData.fromJson(json.decode(response.body));
-      _busData = busData;
-    } else {
-      throw Exception('Failed to get bus data');
-    }
+    return Center(
+      child: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition:
+            CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
+        cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+            southwest: LatLng(49.11, -2.25), northeast: LatLng(49.31, -2.00))),
+        minMaxZoomPreference: MinMaxZoomPreference(11, null),
+        myLocationEnabled: true,
+        compassEnabled: true,
+      ),
+    );
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -91,23 +79,50 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  Future _updateBusMarkersOnMap() async {
-    if (_busData != null) {
-      // for (int i = 0; i < s)
+  Future _fetchDataAndDrawMarkers() async {
+    BusData busData = await _fetchBusData();
+    await _updateBusMarkersOnMap(busData);
+  }
 
-      for (int i = 0; i < _busData.minimumInfoUpdates.length; i++) {
-        MarkerOptions markerOptions = MarkerOptions(
-            position: LatLng(_busData.minimumInfoUpdates[i].lat,
-                _busData.minimumInfoUpdates[i].lon),
-            infoWindowText: InfoWindowText(_busData.minimumInfoUpdates[i].line,
-                _busData.minimumInfoUpdates[i].direction));
+  Future<BusData> _fetchBusData() async {
+    final response = await http.get(
+        'https://sojbuslivetimespublic.azurewebsites.net/api/Values/v1/GetMin?secondsAgo=3600');
+    if (response.statusCode == 200) {
+      BusData busData = BusData.fromJson(json.decode(response.body));
+      return busData;
+    } else {
+      throw Exception('Failed to get bus data');
+    }
+  }
 
-        if (_busMarkers.containsKey(_busData.minimumInfoUpdates[i].bus)) {
-          await mapController.updateMarker(
-              _busMarkers[_busData.minimumInfoUpdates[i].bus], markerOptions);
+  Future _updateBusMarkersOnMap(BusData busData) async {
+    if (busData != null) {
+      for (int i = 0; i < busData.minimumInfoUpdates.length; i++) {
+        bool routeSelected = _selectedRoutes
+                .where((x) => x.name == busData.minimumInfoUpdates[i].line)
+                .length ==
+            1;
+
+        if (routeSelected) {
+          MarkerOptions markerOptions = MarkerOptions(
+              position: LatLng(busData.minimumInfoUpdates[i].lat,
+                  busData.minimumInfoUpdates[i].lon),
+              infoWindowText: InfoWindowText(busData.minimumInfoUpdates[i].line,
+                  busData.minimumInfoUpdates[i].direction));
+
+          if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
+            await mapController.updateMarker(
+                _busMarkers[busData.minimumInfoUpdates[i].bus], markerOptions);
+          } else {
+            Marker marker = await mapController.addMarker(markerOptions);
+            _busMarkers[busData.minimumInfoUpdates[i].bus] = marker;
+          }
         } else {
-          Marker marker = await mapController.addMarker(markerOptions);
-          _busMarkers[_busData.minimumInfoUpdates[i].bus] = marker;
+          if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
+            Marker marker = _busMarkers[busData.minimumInfoUpdates[i].bus];
+            await mapController.removeMarker(marker);
+            _busMarkers.remove(busData.minimumInfoUpdates[i].bus);
+          }
         }
       }
     }
