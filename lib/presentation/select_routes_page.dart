@@ -49,7 +49,7 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return _buildRouteSelector(
-                                      viewModel, snapshot.data);
+                                      context, viewModel, snapshot.data);
                                 } else if (snapshot.hasError) {
                                   return Text("${snapshot.error}");
                                 }
@@ -76,13 +76,32 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
   }
 
   SingleChildScrollView _buildRouteSelector(
-      HomePageViewModel viewModel, RouteData routeData) {
-    GridTile selectAllTile =
-        _createRouteTile(viewModel, routeData, "All", "#b70005", 220, 88);
+      BuildContext context, HomePageViewModel viewModel, RouteData routeData) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    GridTile selectAllTile = _createRouteTile(
+        viewModel,
+        routeData,
+        "All",
+        "#b70005",
+        (0.55 * screenWidth),
+        (0.25 * screenWidth),
+        (0.05 * screenWidth),
+        (0.05 * screenWidth),
+        (0.01 * screenWidth),
+        (0.01 * screenWidth));
 
     List<GridTile> routeRows = _routeData.routes
         .map((route) => _createRouteTile(
-            viewModel, routeData, route.number, route.colour, 98, 98))
+            viewModel,
+            routeData,
+            route.number,
+            route.colour,
+            (0.25 * screenWidth),
+            (0.25 * screenWidth),
+            (0.05 * screenWidth),
+            (0.05 * screenWidth),
+            (0.01 * screenWidth),
+            (0.01 * screenWidth)))
         .toList();
     routeRows.insert(0, selectAllTile);
 
@@ -92,8 +111,17 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
     ));
   }
 
-  GridTile _createRouteTile(HomePageViewModel viewModel, RouteData routeData,
-      String routeName, String colorInHex, double width, double height) {
+  GridTile _createRouteTile(
+      HomePageViewModel viewModel,
+      RouteData routeData,
+      String routeName,
+      String colorInHex,
+      double width,
+      double height,
+      double edgeLeft,
+      double edgeTop,
+      double edgeRight,
+      double edgeBottom) {
     final bool alreadySelected =
         viewModel.selectedRoutes.where((x) => x.name == routeName).length == 1;
     final bool allSelected =
@@ -107,7 +135,7 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
             onTap: () {
               setState(() {
                 if (routeName == "All" && !allSelected) {
-                    viewModel.onRemoveAllSelectedRoutes();
+                  viewModel.onRemoveAllSelectedRoutes();
                   for (int i = 0; i < routeData.routes.length; i++) {
                     viewModel.onAddSelectedRoute(
                         SelectedRoute(name: routeData.routes[i].number));
@@ -131,7 +159,8 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
                         style: TextStyle(color: Colors.white, fontSize: 24))),
                 width: width,
                 height: height,
-                margin: new EdgeInsets.fromLTRB(20, 20, 15, 0),
+                margin: new EdgeInsets.fromLTRB(
+                    edgeLeft, edgeTop, edgeRight, edgeBottom),
                 decoration: new BoxDecoration(
                     color: HexColor(colorInHex),
                     borderRadius: BorderRadius.all(const Radius.circular(50))),
