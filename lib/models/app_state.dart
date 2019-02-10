@@ -5,8 +5,7 @@ class AppState {
   final List<SelectedRoute> selectedRoutes;
   final AppTab activeTab;
 
-
-  AppState({@required this.selectedRoutes, @required this.activeTab});
+  AppState({@required this.selectedRoutes, this.activeTab = AppTab.map});
 
   AppState.initialState()
       : selectedRoutes = List.unmodifiable(<SelectedRoute>[]),
@@ -16,10 +15,7 @@ class AppState {
       : selectedRoutes = (json['selectedRoutes'] as List)
             .map((i) => SelectedRoute.fromJson(i))
             .toList(),
-        activeTab = (json['activeTab']);
+        activeTab = json['activeTab'];
 
-  Map toJson() =>
-      {'selectedRoutes': selectedRoutes, 'currentIndex': activeTab};
+  Map toJson() => {'selectedRoutes': selectedRoutes};
 }
-
-

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void saveToPreferences(AppState state) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   var string = json.encode(state.toJson());
+
   await preferences.setString('selectedRoutesState', string);
 }
 
