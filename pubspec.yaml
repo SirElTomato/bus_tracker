@@ -17,8 +17,8 @@ dependencies:
     sdk: flutter
   http: ^0.12.0
   google_maps_flutter: ^0.2.0
-  flutter_redux : ^0.5.3
-  permission : ^ 0.1.1
+  flutter_redux: ^0.5.3
+  permission: ^ 0.1.1
   shared_preferences: ^0.5.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -29,29 +29,123 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - assets/circle.png
-  #  - images/a_dot_ham.jpeg
+  assets:
+    - assets/bus_markers/100/1.png
+    - assets/bus_markers/100/12.png
+    - assets/bus_markers/100/12A.png
+    - assets/bus_markers/100/13.png
+    - assets/bus_markers/100/14.png
+    - assets/bus_markers/100/15.png
+    - assets/bus_markers/100/16.png
+    - assets/bus_markers/100/19.png
+    - assets/bus_markers/100/1A.png
+    - assets/bus_markers/100/1G.png
+    - assets/bus_markers/100/20.png
+    - assets/bus_markers/100/21.png
+    - assets/bus_markers/100/22.png
+    - assets/bus_markers/100/23.png
+    - assets/bus_markers/100/27.png
+    - assets/bus_markers/100/28.png
+    - assets/bus_markers/100/2A.png
+    - assets/bus_markers/100/3.png
+    - assets/bus_markers/100/4.png
+    - assets/bus_markers/100/5.png
+    - assets/bus_markers/100/6.png
+    - assets/bus_markers/100/7.png
+    - assets/bus_markers/100/X22.png
+    - assets/bus_markers/100/default.png
 
+    - assets/bus_markers/150/1.png
+    - assets/bus_markers/150/12.png
+    - assets/bus_markers/150/12A.png
+    - assets/bus_markers/150/13.png
+    - assets/bus_markers/150/14.png
+    - assets/bus_markers/150/15.png   
+    - assets/bus_markers/150/X22.png
+    - assets/bus_markers/150/16.png
+    - assets/bus_markers/150/19.png
+    - assets/bus_markers/150/1A.png
+    - assets/bus_markers/150/1G.png
+    - assets/bus_markers/150/20.png
+    - assets/bus_markers/150/21.png
+    - assets/bus_markers/150/22.png
+    - assets/bus_markers/150/23.png
+    - assets/bus_markers/150/27.png
+    - assets/bus_markers/150/28.png
+    - assets/bus_markers/150/2A.png
+    - assets/bus_markers/150/3.png
+    - assets/bus_markers/150/4.png
+    - assets/bus_markers/150/5.png
+    - assets/bus_markers/150/6.png
+    - assets/bus_markers/150/7.png
+    - assets/bus_markers/150/X22.png
+    - assets/bus_markers/150/default.png
+
+    - assets/bus_markers/200/1.png
+    - assets/bus_markers/200/12.png
+    - assets/bus_markers/200/12A.png
+    - assets/bus_markers/200/13.png
+    - assets/bus_markers/200/14.png
+    - assets/bus_markers/200/15.png
+    - assets/bus_markers/200/16.png
+    - assets/bus_markers/200/19.png
+    - assets/bus_markers/200/1A.png
+    - assets/bus_markers/200/1G.png
+    - assets/bus_markers/200/20.png
+    - assets/bus_markers/200/21.png
+    - assets/bus_markers/200/22.png
+    - assets/bus_markers/200/23.png
+    - assets/bus_markers/200/27.png
+    - assets/bus_markers/200/28.png
+    - assets/bus_markers/200/2A.png
+    - assets/bus_markers/200/3.png
+    - assets/bus_markers/200/4.png
+    - assets/bus_markers/200/5.png
+    - assets/bus_markers/200/6.png
+    - assets/bus_markers/200/7.png
+    - assets/bus_markers/200/X22.png
+    - assets/bus_markers/200/default.png
+
+    - assets/bus_markers/250/1.png
+    - assets/bus_markers/250/12.png
+    - assets/bus_markers/250/12A.png
+    - assets/bus_markers/250/13.png
+    - assets/bus_markers/250/14.png
+    - assets/bus_markers/250/15.png
+    - assets/bus_markers/250/16.png
+    - assets/bus_markers/250/19.png
+    - assets/bus_markers/250/1A.png
+    - assets/bus_markers/250/1G.png
+    - assets/bus_markers/250/20.png
+    - assets/bus_markers/250/21.png
+    - assets/bus_markers/250/22.png
+    - assets/bus_markers/250/23.png
+    - assets/bus_markers/250/27.png
+    - assets/bus_markers/250/28.png
+    - assets/bus_markers/250/2A.png
+    - assets/bus_markers/250/3.png
+    - assets/bus_markers/250/4.png
+    - assets/bus_markers/250/5.png
+    - assets/bus_markers/250/6.png
+    - assets/bus_markers/250/7.png
+    - assets/bus_markers/250/X22.png
+    - assets/bus_markers/250/default.png
+  #  - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.io/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a

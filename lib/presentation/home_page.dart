@@ -69,6 +69,8 @@ class HomePageState extends State<HomePage> {
         minMaxZoomPreference: MinMaxZoomPreference(11, null),
         myLocationEnabled: true,
         compassEnabled: true,
+        rotateGesturesEnabled: false,
+        tiltGesturesEnabled: false,
       ),
     );
   }
@@ -104,18 +106,44 @@ class HomePageState extends State<HomePage> {
             1;
 
         if (routeSelected) {
-          MarkerOptions markerOptions = MarkerOptions(
-              position: LatLng(busData.minimumInfoUpdates[i].lat,
-                  busData.minimumInfoUpdates[i].lon),
-              infoWindowText: InfoWindowText(busData.minimumInfoUpdates[i].line,
-                  busData.minimumInfoUpdates[i].direction));
-
-          if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
-            await mapController.updateMarker(
-                _busMarkers[busData.minimumInfoUpdates[i].bus], markerOptions);
-          } else {
-            Marker marker = await mapController.addMarker(markerOptions);
-            _busMarkers[busData.minimumInfoUpdates[i].bus] = marker;
+          try {
+            // TODO: add option to choose marker size from settings
+            MarkerOptions markerOptions = MarkerOptions(
+                position: LatLng(busData.minimumInfoUpdates[i].lat,
+                    busData.minimumInfoUpdates[i].lon),
+                infoWindowText: InfoWindowText(
+                    busData.minimumInfoUpdates[i].line,
+                    busData.minimumInfoUpdates[i].direction),
+                icon: BitmapDescriptor.fromAsset("assets/bus_markers/100/" +
+                    busData.minimumInfoUpdates[i].line +
+                    ".png"),
+                rotation: busData.minimumInfoUpdates[i].bearing.toDouble());
+            if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
+              await mapController.updateMarker(
+                  _busMarkers[busData.minimumInfoUpdates[i].bus],
+                  markerOptions);
+            } else {
+              Marker marker = await mapController.addMarker(markerOptions);
+              _busMarkers[busData.minimumInfoUpdates[i].bus] = marker;
+            }
+          } catch (e) {
+            MarkerOptions markerOptions = MarkerOptions(
+                position: LatLng(busData.minimumInfoUpdates[i].lat,
+                    busData.minimumInfoUpdates[i].lon),
+                infoWindowText: InfoWindowText(
+                    busData.minimumInfoUpdates[i].line,
+                    busData.minimumInfoUpdates[i].direction),
+                icon: BitmapDescriptor.fromAsset(
+                    "assets/bus_markers/100/default.png"),
+                rotation: busData.minimumInfoUpdates[i].bearing.toDouble());
+            if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
+              await mapController.updateMarker(
+                  _busMarkers[busData.minimumInfoUpdates[i].bus],
+                  markerOptions);
+            } else {
+              Marker marker = await mapController.addMarker(markerOptions);
+              _busMarkers[busData.minimumInfoUpdates[i].bus] = marker;
+            }
           }
         } else {
           if (_busMarkers.containsKey(busData.minimumInfoUpdates[i].bus)) {
