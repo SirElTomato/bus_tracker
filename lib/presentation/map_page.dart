@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'package:bus_tracker/components/tab_selector.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/select_routes_page.dart';
 import 'package:bus_tracker/view_models/home_page_view_model.dart';
@@ -21,7 +22,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-  int _currentIndex = 0;
   GoogleMapController mapController;
   List<SelectedRoute> _selectedRoutes;
   HashMap<String, Marker> _busMarkers = new HashMap<String, Marker>();
@@ -29,8 +29,6 @@ class MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    const oneSec = const Duration(milliseconds: 3600);
-    new Timer.periodic(oneSec, (Timer t) => _fetchDataAndDrawMarkers());
   }
 
   @override
@@ -50,22 +48,7 @@ class MapPageState extends State<MapPage> {
               })
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex:
-            _currentIndex, // this will be set when a new tab is tapped
-        items: [
-          new BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            title: Text('Map'),
-          ),
-          new BottomNavigationBarItem(
-            icon: Icon(Icons.featured_play_list),
-            title: Text('Timetable'),
-          ),
-          new BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Settings'))
-        ],
-      ),
+      bottomNavigationBar: TabSelector(),
       body: StoreConnector<AppState, HomePageViewModel>(
         converter: (Store<AppState> store) => HomePageViewModel.create(store),
         builder: (BuildContext context, HomePageViewModel viewModel) =>
@@ -97,6 +80,8 @@ class MapPageState extends State<MapPage> {
     setState(() {
       mapController = controller;
     });
+    const oneSec = const Duration(milliseconds: 1000);
+    new Timer.periodic(oneSec, (Timer t) => _fetchDataAndDrawMarkers());
   }
 
   Future _fetchDataAndDrawMarkers() async {
@@ -124,7 +109,6 @@ class MapPageState extends State<MapPage> {
             1;
 
         if (routeSelected) {
-          // TODO: add option to choose marker size from settings
           try {
             // TODO: add option to choose marker size from settings
             MarkerOptions markerOptions = MarkerOptions(

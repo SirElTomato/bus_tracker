@@ -1,12 +1,12 @@
 import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/presentation/home_page.dart';
 import 'package:bus_tracker/redux/actions.dart';
-import 'package:bus_tracker/redux/reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:bus_tracker/redux/middleware.dart';
+import 'package:bus_tracker/reducers/app_state_reducer.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,15 +36,6 @@ class MyApp extends StatelessWidget {
                 },
               )
         },
-        // home: StoreBuilder<AppState>(
-        //   onInit: (store) => store.dispatch(GetState()),
-        //   builder: (BuildContext context, Store<AppState> store) => HomePage(
-        //         onInit: () {
-        //           StoreProvider.of<AppState>(context)
-        //               .dispatch(GetSelectedRoutesAction());
-        //         },
-        //       ),
-        // ),
       ),
     );
   }
