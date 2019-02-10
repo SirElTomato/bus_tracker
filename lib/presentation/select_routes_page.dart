@@ -1,6 +1,5 @@
 import 'package:bus_tracker/extensions.dart';
-import 'package:bus_tracker/models/app_state.dart';
-import 'package:bus_tracker/models/route_data.dart';
+import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/view_models/home_page_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';

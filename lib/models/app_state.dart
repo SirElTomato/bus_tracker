@@ -1,33 +1,25 @@
+import 'package:bus_tracker/models/models.dart';
 import 'package:flutter/foundation.dart';
 
 class AppState {
   final List<SelectedRoute> selectedRoutes;
+  final AppTab activeTab;
 
-  AppState({@required this.selectedRoutes});
+
+  AppState({@required this.selectedRoutes, @required this.activeTab});
 
   AppState.initialState()
-      : selectedRoutes = List.unmodifiable(<SelectedRoute>[]);
+      : selectedRoutes = List.unmodifiable(<SelectedRoute>[]),
+        activeTab = AppTab.map;
 
   AppState.fromJson(Map json)
       : selectedRoutes = (json['selectedRoutes'] as List)
             .map((i) => SelectedRoute.fromJson(i))
-            .toList();
+            .toList(),
+        activeTab = (json['activeTab']);
 
-  Map toJson() => {'selectedRoutes': selectedRoutes};
+  Map toJson() =>
+      {'selectedRoutes': selectedRoutes, 'currentIndex': activeTab};
 }
 
-class SelectedRoute {
-  final String name;
 
-  SelectedRoute({@required this.name});
-
-  SelectedRoute copyWith({String name}) {
-    return SelectedRoute(name: name ?? this.name);
-  }
-
-  SelectedRoute.fromJson(Map json) : name = json['name'];
-
-  Map toJson() => {
-        'name': name,
-      };
-}

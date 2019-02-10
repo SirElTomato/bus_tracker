@@ -1,29 +1,10 @@
-import 'package:bus_tracker/models/app_state.dart';
-import 'package:bus_tracker/redux/actions.dart';
+import 'package:bus_tracker/models/models.dart';
+import 'package:bus_tracker/reducers/selected_routes_reducer.dart';
+import 'package:bus_tracker/reducers/tabs_reducer.dart';
 
 AppState appStateReducer(AppState state, action) {
   return AppState(
-      selectedRoutes: selectedRouteReducer(state.selectedRoutes, action));
+      selectedRoutes: selectedRouteReducer(state.selectedRoutes, action),
+      activeTab: tabsReducer(state.activeTab, action));
 }
 
-List<SelectedRoute> selectedRouteReducer(List<SelectedRoute> state, action) {
-  if (action is AddSelectedRouteAction) {
-    return []
-      ..addAll(state)
-      ..add(action.selectedRoute);
-  }
-
-  if (action is RemoveSelectedRouteAction) {
-    return List.unmodifiable(List.from(state)..remove(action.selectedRoute));
-  }
-
-  if (action is RemoveAllSelectedRoutesAction) {
-    return List.unmodifiable([]);
-  }
-
-  if (action is LoadedSelectedRoutesAction) {
-    return action.selectedRoutes;
-  }
-
-  return state;
-}

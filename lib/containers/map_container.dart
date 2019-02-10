@@ -1,26 +1,51 @@
-import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/redux/actions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class HomePageViewModel {
+class MapContainer extends StatelessWidget {
+  MapContainer({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, _ViewModel>(
+      converter: _ViewModel.fromStore,
+      builder: (context, vm) {
+        return Center(child: Text('MapContainer'));
+      },
+    );
+  }
+}
+
+class _ViewModel {
   final List<SelectedRoute> selectedRoutes;
   final Function(SelectedRoute) onAddSelectedRoute;
   final Function(SelectedRoute) onRemoveSelectedRoute;
   final Function() onRemoveAllSelectedRoutes;
-  final int currentIndex;
-  final Function(int) onUpdateCurrentIndex;
 
-  HomePageViewModel({
+  _ViewModel({
     this.selectedRoutes,
     this.onAddSelectedRoute,
     this.onRemoveSelectedRoute,
     this.onRemoveAllSelectedRoutes,
-    this.currentIndex,
-    this.onUpdateCurrentIndex,
   });
 
-  factory HomePageViewModel.create(Store<AppState> store) {
+  static _ViewModel fromStore(Store<AppState> store) {
+    return _ViewModel(
+        selectedRoutes: store.state.selectedRoutes,
+        onAddSelectedRoute: (routeName) {
+          store.dispatch(AddSelectedRouteAction(routeName));
+        },
+        onRemoveSelectedRoute: (routeName) {
+          store.dispatch(RemoveSelectedRouteAction(routeName));
+        },
+        onRemoveAllSelectedRoutes: () {
+          store.dispatch(RemoveAllSelectedRoutesAction());
+        });
+  }
+
+  factory _ViewModel.create(Store<AppState> store) {
     _onAddSelectedRoute(SelectedRoute routeName) {
       store.dispatch(AddSelectedRouteAction(routeName));
     }
@@ -33,17 +58,11 @@ class HomePageViewModel {
       store.dispatch(RemoveAllSelectedRoutesAction());
     }
 
-    // _onUpdateCurrentIndex(int newCurrentIndex) {
-    //   store.dispatch(UpdateCurrentIndexAction(newCurrentIndex));
-    // }
-
-    return HomePageViewModel(
+    return _ViewModel(
       selectedRoutes: store.state.selectedRoutes,
       onAddSelectedRoute: _onAddSelectedRoute,
       onRemoveSelectedRoute: _onRemoveSelectedRoute,
       onRemoveAllSelectedRoutes: _onRemoveAllSelectedRoutes,
-      // currentIndex: store.state.currentIndex,
-      // onUpdateCurrentIndex: _onUpdateCurrentIndex,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:bus_tracker/models/app_state.dart';
+import 'package:bus_tracker/models/models.dart';
 
 class AddSelectedRouteAction {
   // final String routeName;
@@ -24,4 +24,15 @@ class LoadedSelectedRoutesAction {
   final List<SelectedRoute> selectedRoutes;
 
   LoadedSelectedRoutesAction(this.selectedRoutes);
+}
+
+class UpdateTabAction {
+  final AppTab newTab;
+
+  UpdateTabAction(this.newTab);
+
+  @override
+  String toString() {
+    return 'UpdateTabAction{newTab: $newTab}';
+  }
 }
