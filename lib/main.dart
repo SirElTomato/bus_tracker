@@ -1,14 +1,12 @@
 import 'package:bus_tracker/models/app_state.dart';
 import 'package:bus_tracker/presentation/home_page.dart';
 import 'package:bus_tracker/redux/actions.dart';
-import 'package:bus_tracker/redux/reducers.dart';
 import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:bus_tracker/redux/middleware.dart';
-
-// void main() => runApp(MyApp());
+import 'package:bus_tracker/reducers/app_state_reducer.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,13 +26,16 @@ class MyApp extends StatelessWidget {
       child: new MaterialApp(
         title: 'Island Mapper',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: Colors.white,
         ),
-        home: StoreBuilder<AppState>(
-          onInit: (store) => store.dispatch(GetSelectedRoutesAction()),
-          builder: (BuildContext context, Store<AppState> store) =>
-              HomePage(title: 'Island Mapper', store: store,),
-        ),
+        routes: {
+          '/': (context) => HomePage(
+                onInit: () {
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(GetSelectedRoutesAction());
+                },
+              )
+        },
       ),
     );
   }
@@ -44,8 +45,7 @@ class MyApp extends StatelessWidget {
         await Permission.getPermissionsStatus([PermissionName.Location]);
 
     for (int i = 0; i < permissionStatuses.length; i++) {
-      if (permissionStatuses[i].permissionStatus ==
-          PermissionStatus.notDecided) {
+      if (permissionStatuses[i].permissionStatus != PermissionStatus.allow) {
         await Permission.requestPermissions(
             [permissionStatuses[i].permissionName]);
       }

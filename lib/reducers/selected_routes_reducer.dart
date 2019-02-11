@@ -1,10 +1,5 @@
-import 'package:bus_tracker/models/app_state.dart';
+import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/redux/actions.dart';
-
-AppState appStateReducer(AppState state, action) {
-  return AppState(
-      selectedRoutes: selectedRouteReducer(state.selectedRoutes, action));
-}
 
 List<SelectedRoute> selectedRouteReducer(List<SelectedRoute> state, action) {
   if (action is AddSelectedRouteAction) {
