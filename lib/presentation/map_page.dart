@@ -65,8 +65,12 @@ class MapPageState extends State<MapPage> {
         onMapCreated: _onMapCreated,
         initialCameraPosition:
             CameraPosition(target: LatLng(49.218360, -2.139824), zoom: 11),
-        cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-            southwest: LatLng(49.11, -2.25), northeast: LatLng(49.31, -2.00))),
+        cameraTargetBounds: CameraTargetBounds(
+          LatLngBounds(
+            southwest: LatLng(49.11, -2.25),
+            northeast: LatLng(49.31, -2.00),
+          ),
+        ),
         minMaxZoomPreference: MinMaxZoomPreference(11, null),
         myLocationEnabled: true,
         compassEnabled: true,
@@ -86,6 +90,7 @@ class MapPageState extends State<MapPage> {
 
   Future _fetchDataAndDrawMarkers() async {
     BusData busData = await _fetchBusData();
+    await _cleanUpMarkers(busData);
     await _updateBusMarkersOnMap(busData);
   }
 
@@ -97,6 +102,27 @@ class MapPageState extends State<MapPage> {
       return busData;
     } else {
       throw Exception('Failed to get bus data');
+    }
+  }
+
+  Future _cleanUpMarkers(BusData busData) async {
+    _busMarkers.forEach((k, v) => checkIfMarkerNeedsToBeRemoved(k, busData));
+  }
+
+  Future checkIfMarkerNeedsToBeRemoved(String key, BusData busData) async {
+    bool markerStillNeeded = false;
+    // loop through all active buses and check if the key of the marker is present
+    for (int i = 0; i < busData.minimumInfoUpdates.length; i++) {
+      if (busData.minimumInfoUpdates[i].bus == key) {
+        markerStillNeeded = true;
+        break;
+      }
+    }
+
+    if (!markerStillNeeded) {
+      Marker marker = _busMarkers[key];
+      await mapController.removeMarker(marker);
+      _busMarkers.remove(key);
     }
   }
 
