@@ -82,11 +82,11 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
         routeData,
         "All",
         "#b70005",
-        (0.55 * screenWidth),
+        (0.563 * screenWidth),
         (0.25 * screenWidth),
+        (0.063 * screenWidth),
         (0.05 * screenWidth),
-        (0.05 * screenWidth),
-        (0.01 * screenWidth),
+        (0.00 * screenWidth),
         (0.01 * screenWidth));
 
     List<GridTile> routeRows = _routeData.routes
@@ -97,9 +97,9 @@ class SelectRoutesPageState extends State<SelectRoutesPage> {
             route.colour,
             (0.25 * screenWidth),
             (0.25 * screenWidth),
+            (0.063 * screenWidth),
             (0.05 * screenWidth),
-            (0.05 * screenWidth),
-            (0.01 * screenWidth),
+            (0.00 * screenWidth),
             (0.01 * screenWidth)))
         .toList();
     routeRows.insert(0, selectAllTile);
