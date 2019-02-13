@@ -1,7 +1,3 @@
-// Copyright 2018 The Flutter Architecture Sample Authors. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found
-// in the LICENSE file.
-
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/redux/actions.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +26,9 @@ class TabSelector extends StatelessWidget {
       converter: _ViewModel.fromStore,
       builder: (context, vm) {
         return BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          iconSize: 24.0,
+          fixedColor: Colors.blue,
           currentIndex: AppTab.values.indexOf(vm.activeTab),
           onTap: vm.onTabSelected,
           items: AppTab.values.map((tab) {
