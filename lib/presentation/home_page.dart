@@ -2,6 +2,7 @@ import 'package:bus_tracker/components/active_tab.dart';
 import 'package:bus_tracker/components/tab_selector.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/map_page.dart';
+import 'package:bus_tracker/presentation/settings.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,11 +30,7 @@ class HomePageState extends State<HomePage> {
         if (activeTab == AppTab.map) {
           return MapPage();
         } else if (activeTab == AppTab.settings) {
-          return Scaffold(
-            appBar: AppBar(title: Text("Settings")),
-            body: Center(child: Text('Settings')),
-            bottomNavigationBar: TabSelector(),
-          );
+          return SettingsPage();
         } else {
           return Scaffold(
             appBar: AppBar(title: Text("Timetable")),

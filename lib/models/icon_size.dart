@@ -2,9 +2,9 @@
 // Use of this source code is governed by the MIT license that can be found
 // in the LICENSE file.
 
-export 'app_state.dart';
-export 'app_tab.dart';
-export 'bus_data.dart';
-export 'route_data.dart';
-export 'selected_route.dart';
-export 'icon_size.dart';
+class IconSize {
+  static const small = 100;
+  static const medium = 150;
+  static const large = 200;
+  static const x_large = 250;
+}
