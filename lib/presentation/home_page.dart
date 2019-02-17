@@ -2,10 +2,12 @@ import 'package:bus_tracker/components/active_tab.dart';
 import 'package:bus_tracker/components/tab_selector.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/map_page.dart';
-import 'package:bus_tracker/presentation/settings.dart';
+import 'package:bus_tracker/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  static const String route = '/';
+
   final void Function() onInit;
 
   HomePage({@required this.onInit});

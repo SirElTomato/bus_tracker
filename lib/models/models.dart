@@ -8,3 +8,4 @@ export 'bus_data.dart';
 export 'route_data.dart';
 export 'selected_route.dart';
 export 'icon_size.dart';
+export 'settings.dart';

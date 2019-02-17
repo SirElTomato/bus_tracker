@@ -25,6 +25,7 @@ class MapPageState extends State<MapPage> {
   GoogleMapController mapController;
   List<SelectedRoute> _selectedRoutes;
   HashMap<String, Marker> _busMarkers = new HashMap<String, Marker>();
+  int _markerSize = IconSize.small;
 
   @override
   void initState() {
@@ -52,14 +53,17 @@ class MapPageState extends State<MapPage> {
       body: StoreConnector<AppState, HomePageViewModel>(
         converter: (Store<AppState> store) => HomePageViewModel.create(store),
         builder: (BuildContext context, HomePageViewModel viewModel) =>
-            _buildMap(viewModel),
+            _buildMap(context, viewModel),
       ),
     );
   }
 
-  Center _buildMap(HomePageViewModel viewModel) {
+  Center _buildMap(BuildContext context, HomePageViewModel viewModel) {
     _selectedRoutes = viewModel.selectedRoutes;
-
+    setState(() {
+      _markerSize = viewModel.settings.busMarkerIconSize;
+    });
+    _setMarkerIconSize(context, viewModel);
     return Center(
       child: GoogleMap(
         onMapCreated: _onMapCreated,
@@ -86,6 +90,16 @@ class MapPageState extends State<MapPage> {
     });
     const oneSec = const Duration(milliseconds: 1000);
     new Timer.periodic(oneSec, (Timer t) => _fetchDataAndDrawMarkers());
+  }
+
+  void _setMarkerIconSize(BuildContext context, HomePageViewModel viewModel) {
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // if (screenWidth < 300) {
+    //   _markerSize = 100;
+    // } else {
+    //   _markerSize = 150;
+    // }
+    _markerSize = viewModel.settings.busMarkerIconSize;
   }
 
   Future _fetchDataAndDrawMarkers() async {
@@ -142,7 +156,9 @@ class MapPageState extends State<MapPage> {
                   busData.minimumInfoUpdates[i].lon),
               infoWindowText: InfoWindowText(busData.minimumInfoUpdates[i].line,
                   busData.minimumInfoUpdates[i].direction),
-              icon: BitmapDescriptor.fromAsset("assets/bus_markers/100/" +
+              icon: BitmapDescriptor.fromAsset("assets/bus_markers/" +
+                  _markerSize.toString() +
+                  "/" +
                   busData.minimumInfoUpdates[i].line +
                   ".png"),
               rotation: busData.minimumInfoUpdates[i].bearing.toDouble(),
@@ -162,8 +178,9 @@ class MapPageState extends State<MapPage> {
                   busData.minimumInfoUpdates[i].lon),
               infoWindowText: InfoWindowText(busData.minimumInfoUpdates[i].line,
                   busData.minimumInfoUpdates[i].direction),
-              icon: BitmapDescriptor.fromAsset(
-                  "assets/bus_markers/100/default.png"),
+              icon: BitmapDescriptor.fromAsset("assets/bus_markers/" +
+                  _markerSize.toString() +
+                  "/default.png"),
               rotation: busData.minimumInfoUpdates[i].bearing.toDouble(),
               anchor: Offset(0.5, 0.5),
             );

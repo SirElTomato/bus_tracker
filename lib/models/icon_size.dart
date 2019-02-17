@@ -8,3 +8,4 @@ class IconSize {
   static const large = 200;
   static const x_large = 250;
 }
+

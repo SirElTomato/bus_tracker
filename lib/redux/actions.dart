@@ -1,5 +1,13 @@
 import 'package:bus_tracker/models/models.dart';
 
+class GetAppState{}
+
+class LoadedAppStateAction {
+  final AppState appState;
+
+  LoadedAppStateAction(this.appState);
+}
+
 class AddSelectedRouteAction {
   // final String routeName;
   final SelectedRoute selectedRoute;
@@ -35,4 +43,18 @@ class UpdateTabAction {
   String toString() {
     return 'UpdateTabAction{newTab: $newTab}';
   }
+}
+
+class UpdateBusMarkerIconSize {
+  final int busMarkerIconSize;
+
+  UpdateBusMarkerIconSize(this.busMarkerIconSize);
+}
+
+class GetSettingsAction {}
+
+class LoadedSettingsAction {
+  final Settings settings;
+
+  LoadedSettingsAction(this.settings);
 }

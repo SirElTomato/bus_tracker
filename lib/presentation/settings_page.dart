@@ -6,6 +6,7 @@ import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/change_icon_size_page.dart';
 import 'package:bus_tracker/presentation/select_routes_page.dart';
 import 'package:bus_tracker/view_models/home_page_view_model.dart';
+import 'package:bus_tracker/view_models/settings_view_model.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -39,17 +40,41 @@ class SettingsPageState extends State<SettingsPage> {
         title: Text("Settings"),
       ),
       bottomNavigationBar: TabSelector(),
-      body: StoreConnector<AppState, HomePageViewModel>(
-          converter: (Store<AppState> store) => HomePageViewModel.create(store),
-          builder: (BuildContext context, HomePageViewModel viewModel) =>
+      body: StoreConnector<AppState, SettingsPageViewModel>(
+          converter: (Store<AppState> store) => SettingsPageViewModel.create(store),
+          builder: (BuildContext context, SettingsPageViewModel viewModel) =>
               buildSettings),
     );
   }
 
   Widget get buildSettings {
+    // return ListView.separated(separatorBuilder: (context, index) => Divider(
+    //     color: Colors.black,
+    //   ),
+    //   itemBuilder: () => <Widget>[
+    //   ListTile(
+    //     title: Text('Change bus marker icon size'),
+    //     trailing: Icon(Icons.format_size),
+    //     onTap: () => Navigator.push(context,
+    //         MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
+    //   ),
+    //   ListTile(
+    //     title: Text('Show my location on the map'),
+    //     trailing: Icon(Icons.format_size),
+    //     onTap: () => Navigator.push(context,
+    //         MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
+    //   )
+    // ],);
+
     return ListView(children: <Widget>[
       ListTile(
-        title: Text('Change Bus Marker Icon Size'),
+        title: Text('Change bus marker icon size'),
+        trailing: Icon(Icons.format_size),
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
+      ),
+      ListTile(
+        title: Text('Show my location on the map'),
         trailing: Icon(Icons.format_size),
         onTap: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => ChangeIconSizePage())),

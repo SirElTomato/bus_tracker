@@ -5,6 +5,7 @@ import 'package:bus_tracker/components/tab_selector.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/select_routes_page.dart';
 import 'package:bus_tracker/view_models/home_page_view_model.dart';
+import 'package:bus_tracker/view_models/settings_view_model.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -38,14 +39,32 @@ class ChangeIconSizePageState extends State<ChangeIconSizePage> {
         title: Text("Change Bus Marker Size"),
       ),
       bottomNavigationBar: TabSelector(),
-      body: StoreConnector<AppState, HomePageViewModel>(
-          converter: (Store<AppState> store) => HomePageViewModel.create(store),
-          builder: (BuildContext context, HomePageViewModel viewModel) =>
-              addYourRating),
+      body: StoreConnector<AppState, SettingsPageViewModel>(
+          converter: (Store<AppState> store) =>
+              SettingsPageViewModel.create(store),
+          builder: (BuildContext context, SettingsPageViewModel viewModel) =>
+              addYourRating(viewModel)),
     );
   }
 
-  Widget get addYourRating {
+  Widget addYourRating(SettingsPageViewModel viewModel) {
+    switch (viewModel.settings.busMarkerIconSize) {
+      case 100:
+        _sliderValue = 1;
+        break;
+      case 150:
+        _sliderValue = 2;
+        break;
+      case 200:
+        _sliderValue = 3;
+        break;
+      case 250:
+        _sliderValue = 4;
+        break;
+      default:
+        _sliderValue = 1;
+    }
+    iconSize = viewModel.settings.busMarkerIconSize;
     return Column(
       children: <Widget>[
         Container(
@@ -98,7 +117,7 @@ class ChangeIconSizePageState extends State<ChangeIconSizePage> {
                   min: 0.0,
                   max: 4.0,
                   onChanged: (newRating) {
-                    handleChangeBusMarkerSize(newRating);
+                    handleChangeBusMarkerSize(newRating, viewModel);
                   },
                   value: _sliderValue,
                 ),
@@ -118,16 +137,20 @@ class ChangeIconSizePageState extends State<ChangeIconSizePage> {
     );
   }
 
-  void handleChangeBusMarkerSize(newRating) {
+  void handleChangeBusMarkerSize(newRating, SettingsPageViewModel viewModel) {
     setState(() {
       if (newRating < 2) {
         iconSize = IconSize.small;
+        viewModel.onUpdateBusMarkerIconSize(IconSize.small);
       } else if (newRating < 3) {
         iconSize = IconSize.medium;
-      } else if (newRating < 4)
+        viewModel.onUpdateBusMarkerIconSize(IconSize.medium);
+      } else if (newRating < 4) {
         iconSize = IconSize.large;
-      else if (newRating < 5) {
+        viewModel.onUpdateBusMarkerIconSize(IconSize.large);
+      } else if (newRating < 5) {
         iconSize = IconSize.x_large;
+        viewModel.onUpdateBusMarkerIconSize(IconSize.x_large);
       }
 
       _sliderValue = newRating;

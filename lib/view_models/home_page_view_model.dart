@@ -8,16 +8,16 @@ class HomePageViewModel {
   final Function(SelectedRoute) onAddSelectedRoute;
   final Function(SelectedRoute) onRemoveSelectedRoute;
   final Function() onRemoveAllSelectedRoutes;
-  final int currentIndex;
-  final Function(int) onUpdateCurrentIndex;
+  final Settings settings;
+  final Function(int) onUpdateBusMarkerIconSize;
 
   HomePageViewModel({
     this.selectedRoutes,
     this.onAddSelectedRoute,
     this.onRemoveSelectedRoute,
     this.onRemoveAllSelectedRoutes,
-    this.currentIndex,
-    this.onUpdateCurrentIndex,
+    this.settings,
+    this.onUpdateBusMarkerIconSize,
   });
 
   factory HomePageViewModel.create(Store<AppState> store) {
@@ -33,17 +33,17 @@ class HomePageViewModel {
       store.dispatch(RemoveAllSelectedRoutesAction());
     }
 
-    // _onUpdateCurrentIndex(int newCurrentIndex) {
-    //   store.dispatch(UpdateCurrentIndexAction(newCurrentIndex));
-    // }
+    _onUpdateBusMarkerIconSize(int busMarkerIconSize) {
+      store.dispatch(UpdateBusMarkerIconSize(busMarkerIconSize));
+    }
 
     return HomePageViewModel(
       selectedRoutes: store.state.selectedRoutes,
       onAddSelectedRoute: _onAddSelectedRoute,
       onRemoveSelectedRoute: _onRemoveSelectedRoute,
       onRemoveAllSelectedRoutes: _onRemoveAllSelectedRoutes,
-      // currentIndex: store.state.currentIndex,
-      // onUpdateCurrentIndex: _onUpdateCurrentIndex,
+      settings: store.state.settings,
+      onUpdateBusMarkerIconSize: _onUpdateBusMarkerIconSize,
     );
   }
 }

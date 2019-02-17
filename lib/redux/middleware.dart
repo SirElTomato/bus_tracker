@@ -8,14 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void saveToPreferences(AppState state) async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  var string = json.encode(state.toJson());
+  var string = json.encode(state);
+  // var selectedRoutes = '{"selectedRoutes":' + json.encode(state.selectedRoutes) + '}';
 
-  await preferences.setString('selectedRoutesState', string);
+  // await preferences.setString('selectedRoutesState', selectedRoutes);
+  await preferences.setString('appState', string);
 }
 
 Future<AppState> loadFromPreferences() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  var string = preferences.getString('selectedRoutesState');
+  var string = preferences.getString('appState');
   if (string != null) {
     Map map = json.decode(string);
     return AppState.fromJson(map);
@@ -37,5 +39,14 @@ void appStateMiddleware(
   if (action is GetSelectedRoutesAction) {
     await loadFromPreferences().then((state) =>
         store.dispatch(LoadedSelectedRoutesAction(state.selectedRoutes)));
+  }
+
+  if (action is UpdateBusMarkerIconSize) {
+    saveToPreferences(store.state);
+  }
+
+  if (action is GetSettingsAction) {
+    await loadFromPreferences()
+        .then((state) => store.dispatch(LoadedSettingsAction(state.settings)));
   }
 }

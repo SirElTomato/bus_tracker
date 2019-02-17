@@ -29,10 +29,12 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
         ),
         routes: {
-          '/': (context) => HomePage(
+          HomePage.route: (context) => HomePage(
                 onInit: () {
                   StoreProvider.of<AppState>(context)
                       .dispatch(GetSelectedRoutesAction());
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(GetSettingsAction());
                 },
               )
         },
