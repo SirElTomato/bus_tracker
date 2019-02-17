@@ -20,7 +20,7 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   int iconSize = IconSize.small;
-  String _animationName = "Off";
+  bool _isSelected = false;
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class SettingsPageState extends State<SettingsPage> {
             // alignment: Alignment(2, 0),
             // alignment: Alignment.centerRight,
             fit: BoxFit.fitHeight,
-            animation: _animationName,
+            animation: _isSelected ? "On" : "Off",
           ),
         ),
         onTap: () => handleChange(),
@@ -92,13 +92,13 @@ class SettingsPageState extends State<SettingsPage> {
 
   void handleChange() {
     setState(() {
-      switch (_animationName) {
-        case "On":
-          _animationName = "Off";
+      switch (_isSelected) {
+        case true:
+          _isSelected = !_isSelected;
           break;
-        case "Off":
+        case false:
           checkPermissions();
-          _animationName = "On";
+          _isSelected = !_isSelected;
           break;
         default:
       }
