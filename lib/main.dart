@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         await Permission.getPermissionsStatus([PermissionName.Location]);
 
     for (int i = 0; i < permissionStatuses.length; i++) {
-      if (permissionStatuses[i].permissionStatus != PermissionStatus.allow) {
+      if (permissionStatuses[i].permissionStatus == PermissionStatus.notDecided) {
         await Permission.requestPermissions(
             [permissionStatuses[i].permissionName]);
       }

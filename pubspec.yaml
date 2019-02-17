@@ -20,6 +20,7 @@ dependencies:
   flutter_redux: ^0.5.3
   permission: ^ 0.1.1
   shared_preferences: ^0.5.0
+  flare_flutter: ^1.2.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +42,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/flare/Smiley Switch.flr
+
+    #Bus Marker Icons
     - assets/bus_markers/100/1.png
     - assets/bus_markers/100/12.png
     - assets/bus_markers/100/12A.png

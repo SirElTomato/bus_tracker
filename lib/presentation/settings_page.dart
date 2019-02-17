@@ -1,17 +1,12 @@
-import 'dart:async';
-import 'dart:collection';
-import 'dart:convert';
 import 'package:bus_tracker/components/tab_selector.dart';
 import 'package:bus_tracker/models/models.dart';
 import 'package:bus_tracker/presentation/change_icon_size_page.dart';
-import 'package:bus_tracker/presentation/select_routes_page.dart';
-import 'package:bus_tracker/view_models/home_page_view_model.dart';
 import 'package:bus_tracker/view_models/settings_view_model.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission/permission.dart';
 import 'package:redux/redux.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class SettingsPage extends StatefulWidget {
   final String title;
@@ -24,8 +19,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  double _sliderValue = 1.0;
   int iconSize = IconSize.small;
+  String _animationName = "Off";
 
   @override
   void initState() {
@@ -41,13 +36,14 @@ class SettingsPageState extends State<SettingsPage> {
       ),
       bottomNavigationBar: TabSelector(),
       body: StoreConnector<AppState, SettingsPageViewModel>(
-          converter: (Store<AppState> store) => SettingsPageViewModel.create(store),
+          converter: (Store<AppState> store) =>
+              SettingsPageViewModel.create(store),
           builder: (BuildContext context, SettingsPageViewModel viewModel) =>
-              buildSettings),
+              buildSettings(context)),
     );
   }
 
-  Widget get buildSettings {
+  Widget buildSettings(BuildContext context) {
     // return ListView.separated(separatorBuilder: (context, index) => Divider(
     //     color: Colors.black,
     //   ),
@@ -65,20 +61,59 @@ class SettingsPageState extends State<SettingsPage> {
     //         MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
     //   )
     // ],);
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return ListView(children: <Widget>[
       ListTile(
         title: Text('Change bus marker icon size'),
-        trailing: Icon(Icons.format_size),
+        trailing: Icon(Icons.launch),
         onTap: () => Navigator.push(context,
             MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
       ),
       ListTile(
         title: Text('Show my location on the map'),
-        trailing: Icon(Icons.format_size),
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ChangeIconSizePage())),
-      )
+        trailing: Container(
+          margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+          width: screenWidth * 0.2,
+          height: screenWidth * 0.3,
+          // decoration: BoxDecoration(border: Border.all(color: Colors.green)),
+          child: FlareActor(
+            "assets/flare/Smiley Switch.flr",
+            // alignment: Alignment(2, 0),
+            // alignment: Alignment.centerRight,
+            fit: BoxFit.fitHeight,
+            animation: _animationName,
+          ),
+        ),
+        onTap: () => handleChange(),
+      ),
     ]);
+  }
+
+  void handleChange() {
+    setState(() {
+      switch (_animationName) {
+        case "On":
+          _animationName = "Off";
+          break;
+        case "Off":
+          checkPermissions();
+          _animationName = "On";
+          break;
+        default:
+      }
+    });
+  }
+
+    Future checkPermissions() async {
+    List<Permissions> permissionStatuses =
+        await Permission.getPermissionsStatus([PermissionName.Location]);
+
+    for (int i = 0; i < permissionStatuses.length; i++) {
+      if (permissionStatuses[i].permissionStatus != PermissionStatus.allow) {
+        await Permission.requestPermissions(
+            [permissionStatuses[i].permissionName]);
+      }
+    }
   }
 }
