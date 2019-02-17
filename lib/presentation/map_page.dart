@@ -60,9 +60,7 @@ class MapPageState extends State<MapPage> {
 
   Center _buildMap(BuildContext context, HomePageViewModel viewModel) {
     _selectedRoutes = viewModel.selectedRoutes;
-    setState(() {
-      _markerSize = viewModel.settings.busMarkerIconSize;
-    });
+    _markerSize = viewModel.settings.busMarkerIconSize;
     _setMarkerIconSize(context, viewModel);
     return Center(
       child: GoogleMap(
