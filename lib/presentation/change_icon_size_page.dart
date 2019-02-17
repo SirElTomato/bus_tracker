@@ -38,7 +38,6 @@ class ChangeIconSizePageState extends State<ChangeIconSizePage> {
       appBar: AppBar(
         title: Text("Change Bus Marker Size"),
       ),
-      bottomNavigationBar: TabSelector(),
       body: StoreConnector<AppState, SettingsPageViewModel>(
           converter: (Store<AppState> store) =>
               SettingsPageViewModel.create(store),
