@@ -1,0 +1,137 @@
+{
+  "minimumInfoUpdates": [
+    {
+      "bus": "bus-1-2020-1702",
+      "line": "9",
+      "cat": "Public Bus",
+      "lat": 49.19665,
+      "lon": -2.158353,
+      "bearing": 83,
+      "direction": "inbound",
+      "time": "22:39:24",
+      "age": 32
+    },
+    {
+      "bus": "bus-12A-1930-1732",
+      "line": "12A",
+      "cat": "Public Bus",
+      "lat": 49.198386,
+      "lon": -2.136033,
+      "bearing": 113,
+      "direction": "inbound",
+      "time": "22:39:32",
+      "age": 24
+    },
+    {
+      "bus": "bus-12A-2230-1712",
+      "line": "12A",
+      "cat": "Public Bus",
+      "lat": 49.19449,
+      "lon": -2.163271,
+      "bearing": 237,
+      "direction": "outbound",
+      "time": "22:39:19",
+      "age": 37
+    },
+    {
+      "bus": "bus-15-1300-2602",
+      "line": "15",
+      "cat": "Public Bus",
+      "lat": 49.198051,
+      "lon": -2.197551,
+      "bearing": 192,
+      "direction": "inbound",
+      "time": "22:39:21",
+      "age": 35
+    },
+    {
+      "bus": "bus-15-1345-2601",
+      "line": "15",
+      "cat": "Public Bus",
+      "lat": 49.1835,
+      "lon": -2.109825,
+      "bearing": 312,
+      "direction": "inbound",
+      "time": "22:05:58",
+      "age": 2038
+    },
+    {
+      "bus": "bus-15-1610-2603",
+      "line": "15",
+      "cat": "Public Bus",
+      "lat": 49.183613,
+      "lon": -2.10979,
+      "bearing": 316,
+      "direction": "outbound",
+      "time": "22:39:20",
+      "age": 36
+    },
+    {
+      "bus": "bus-1G-2050-1721",
+      "line": "1",
+      "cat": "Public Bus",
+      "lat": 49.167253,
+      "lon": -2.06151,
+      "bearing": 97,
+      "direction": "outbound",
+      "time": "22:35:37",
+      "age": 259
+    },
+    {
+      "bus": "bus-2-2130-1728",
+      "line": "1A",
+      "cat": "Public Bus",
+      "lat": 49.199761,
+      "lon": -2.021121,
+      "bearing": 80,
+      "direction": "inbound",
+      "time": "22:39:38",
+      "age": 18
+    },
+    {
+      "bus": "bus-3-2015-1718",
+      "line": "1",
+      "cat": "Public Bus",
+      "lat": 49.183663,
+      "lon": -2.109918,
+      "bearing": 312,
+      "direction": "inbound",
+      "time": "22:18:16",
+      "age": 1300
+    },
+    {
+      "bus": "bus-3-2115-1716",
+      "line": "3",
+      "cat": "Public Bus",
+      "lat": 49.235576,
+      "lon": -2.04576,
+      "bearing": 246,
+      "direction": "inbound",
+      "time": "22:39:35",
+      "age": 21
+    },
+    {
+      "bus": "bus-5-2025-1703",
+      "line": "1G",
+      "cat": "Public Bus",
+      "lat": 49.179295,
+      "lon": -2.099756,
+      "bearing": 271,
+      "direction": "inbound",
+      "time": "22:39:46",
+      "age": 10
+    },
+    {
+      "bus": "bus-7-2110-1720",
+      "line": "5",
+      "cat": "Public Bus",
+      "lat": 49.230925,
+      "lon": -2.115521,
+      "bearing": 4,
+      "direction": "outbound",
+      "time": "22:39:49",
+      "age": 7
+    }
+  ],
+  "stops": []
+}
