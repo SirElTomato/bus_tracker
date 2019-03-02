@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
 
 void main() {
-  // initKiwi();
+  initKiwi();
   runApp(MyApp());
 }
 

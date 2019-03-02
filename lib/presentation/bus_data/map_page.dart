@@ -13,14 +13,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // final _mapPageBloc = kiwi.Container().resolve<BusDataBloc>();
-  // final http.Client client = http.Client();
-  // final BusDataSource _busDataSource = new BusDataSource(http.Client());
-  // final BusDataRepository _busDataRepository =
-  //     BusDataRepository(BusDataSource(http.Client()));
-
-  final BusDataBloc _mapPageBloc =
-      BusDataBloc(BusDataRepository(BusDataSource(http.Client())));
+  final _mapPageBloc = kiwi.Container().resolve<BusDataBloc>();
 
   @override
   Widget build(BuildContext context) {
