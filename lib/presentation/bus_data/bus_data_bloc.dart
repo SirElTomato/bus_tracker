@@ -9,7 +9,7 @@ class BusDataBloc extends Bloc<BusDataEvent, BusDataState> {
 
   BusDataBloc(this._busDataRepository) : super();
 
-  void onGetBusData() {
+  void getBusData() {
     dispatch(GetBusData());
   }
 
@@ -20,11 +20,11 @@ class BusDataBloc extends Bloc<BusDataEvent, BusDataState> {
   Stream<BusDataState> mapEventToState(
       BusDataState currentState, BusDataEvent event) async* {
     if (event is GetBusData) {
-      getBusData(event);
+      yield* mapGetBusData(event);
     }
   }
 
-  Stream<BusDataState> getBusData(GetBusData event) async* {
+  Stream<BusDataState> mapGetBusData(GetBusData event) async* {
     try {
       final busData = await _busDataRepository.getMinimumInfoUpdates();
       yield BusDataState.successful(busData);
