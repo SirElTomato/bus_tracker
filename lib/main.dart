@@ -1,5 +1,5 @@
 import 'package:bus_tracker/injection_container.dart';
-import 'package:bus_tracker/presentation/bus_data/map_page.dart';
+import 'package:bus_tracker/presentation/map_page.dart';
 import 'package:flutter/material.dart';
 import 'package:permission/permission.dart';
 

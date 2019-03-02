@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bus_tracker/data/repositories/bus_data_repository.dart';
-import 'package:bus_tracker/presentation/bus_data/bus_data_presentation.dart';
+import 'package:bus_tracker/blocs/bus_data/bus_data_presentation.dart';
 
 class BusDataBloc extends Bloc<BusDataEvent, BusDataState> {
   final BusDataRepository _busDataRepository;
