@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:track_my_travel/data/models/serializers/serializers.dart';
 
 part 'minimum_info_update.g.dart';
 
@@ -22,4 +25,9 @@ abstract class MinimumInfoUpdate
 
   factory MinimumInfoUpdate([updates(MinimumInfoUpdateBuilder b)]) =
       _$MinimumInfoUpdate;
+
+  static MinimumInfoUpdate fromJson(String jsonString) {
+    return serializers.deserializeWith(
+        MinimumInfoUpdate.serializer, jsonDecode(jsonString));
+  }
 }

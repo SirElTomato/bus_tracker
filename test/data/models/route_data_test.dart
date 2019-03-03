@@ -14,9 +14,7 @@ void main() {
     "RouteCoordinates":[{"lat":49.183322,"lon":-2.1095108,"isVital":true,"occasional":false,"direction":"O","splitSection":null}],"Active":true}]}
     """;
 
-    final parsed = jsonDecode(jsonString);
-    RouteData routeData =
-        serializers.deserializeWith(RouteData.serializer, parsed);
+    RouteData routeData = RouteData.fromJson(jsonString);
 
     expect(routeData.routes.first.Id, 1);
   });
@@ -29,9 +27,7 @@ void main() {
     "RouteCoordinates":[{"lat":49.183322,"lon":-2.1095108,"isVital":true,"occasional":false,"direction":"O","splitSection":null}],"Active":true}
     """;
 
-    final parsed = jsonDecode(jsonString);
-    BusRoute busRoute =
-        serializers.deserializeWith(BusRoute.serializer, parsed);
+    BusRoute busRoute = BusRoute.fromJson(jsonString);
 
     expect(busRoute.Id, 1);
   });
@@ -43,9 +39,7 @@ void main() {
     {"lat":49.183322,"lon":-2.1095108,"isVital":true,"occasional":false,"direction":"O","splitSection":null}
     """;
 
-    final parsed = jsonDecode(jsonString);
-    RouteCoordinates routeCoordinates =
-        serializers.deserializeWith(RouteCoordinates.serializer, parsed);
+    RouteCoordinates routeCoordinates = RouteCoordinates.fromJson(jsonString);
 
     expect(routeCoordinates.lat, 49.183322);
   });
