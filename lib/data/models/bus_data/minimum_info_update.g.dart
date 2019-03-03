@@ -6,6 +6,98 @@ part of 'minimum_info_update.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<MinimumInfoUpdate> _$minimumInfoUpdateSerializer =
+    new _$MinimumInfoUpdateSerializer();
+
+class _$MinimumInfoUpdateSerializer
+    implements StructuredSerializer<MinimumInfoUpdate> {
+  @override
+  final Iterable<Type> types = const [MinimumInfoUpdate, _$MinimumInfoUpdate];
+  @override
+  final String wireName = 'MinimumInfoUpdate';
+
+  @override
+  Iterable serialize(Serializers serializers, MinimumInfoUpdate object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'bus',
+      serializers.serialize(object.bus, specifiedType: const FullType(String)),
+      'line',
+      serializers.serialize(object.line, specifiedType: const FullType(String)),
+      'cat',
+      serializers.serialize(object.cat, specifiedType: const FullType(String)),
+      'lat',
+      serializers.serialize(object.lat, specifiedType: const FullType(double)),
+      'lon',
+      serializers.serialize(object.lon, specifiedType: const FullType(double)),
+      'bearing',
+      serializers.serialize(object.bearing, specifiedType: const FullType(int)),
+      'direction',
+      serializers.serialize(object.direction,
+          specifiedType: const FullType(String)),
+      'time',
+      serializers.serialize(object.time, specifiedType: const FullType(String)),
+      'age',
+      serializers.serialize(object.age, specifiedType: const FullType(int)),
+    ];
+
+    return result;
+  }
+
+  @override
+  MinimumInfoUpdate deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new MinimumInfoUpdateBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'bus':
+          result.bus = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'line':
+          result.line = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'cat':
+          result.cat = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'lat':
+          result.lat = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
+        case 'lon':
+          result.lon = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double;
+          break;
+        case 'bearing':
+          result.bearing = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'direction':
+          result.direction = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'time':
+          result.time = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'age':
+          result.age = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$MinimumInfoUpdate extends MinimumInfoUpdate {
   @override
   final String bus;

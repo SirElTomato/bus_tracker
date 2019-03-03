@@ -6,6 +6,60 @@ part of 'bus_data.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<BusData> _$busDataSerializer = new _$BusDataSerializer();
+
+class _$BusDataSerializer implements StructuredSerializer<BusData> {
+  @override
+  final Iterable<Type> types = const [BusData, _$BusData];
+  @override
+  final String wireName = 'BusData';
+
+  @override
+  Iterable serialize(Serializers serializers, BusData object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'minimumInfoUpdates',
+      serializers.serialize(object.minimumInfoUpdates,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(MinimumInfoUpdate)])),
+      'busStops',
+      serializers.serialize(object.busStops,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(BusStop)])),
+    ];
+
+    return result;
+  }
+
+  @override
+  BusData deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BusDataBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'minimumInfoUpdates':
+          result.minimumInfoUpdates.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(MinimumInfoUpdate)]))
+              as BuiltList);
+          break;
+        case 'busStops':
+          result.busStops.replace(serializers.deserialize(value,
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(BusStop)])) as BuiltList);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$BusData extends BusData {
   @override
   final BuiltList<MinimumInfoUpdate> minimumInfoUpdates;

@@ -1,13 +1,16 @@
 import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 part 'bus_stop.g.dart';
 
 abstract class BusStop implements Built<BusStop, BusStopBuilder> {
-  int get stopNumber;
-  String get stopName;
-  double get latitude;
-  double get longitude;
-  int get distanceAwayInMetres;
+  static Serializer<BusStop> get serializer => _$busStopSerializer;
+
+  int get StopNumber;
+  String get StopName;
+  double get Latitude;
+  double get Longitude;
+  int get DistanceAwayInMetres;
 
   BusStop._();
 

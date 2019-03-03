@@ -6,54 +6,138 @@ part of 'bus_route.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<BusRoute> _$busRouteSerializer = new _$BusRouteSerializer();
+
+class _$BusRouteSerializer implements StructuredSerializer<BusRoute> {
+  @override
+  final Iterable<Type> types = const [BusRoute, _$BusRoute];
+  @override
+  final String wireName = 'BusRoute';
+
+  @override
+  Iterable serialize(Serializers serializers, BusRoute object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'Id',
+      serializers.serialize(object.Id, specifiedType: const FullType(int)),
+      'Number',
+      serializers.serialize(object.Number,
+          specifiedType: const FullType(String)),
+      'Name',
+      serializers.serialize(object.Name, specifiedType: const FullType(String)),
+      'Colour',
+      serializers.serialize(object.Colour,
+          specifiedType: const FullType(String)),
+      'ColourInverse',
+      serializers.serialize(object.ColourInverse,
+          specifiedType: const FullType(String)),
+      'RouteCoordinates',
+      serializers.serialize(object.RouteCoordinates,
+          specifiedType: const FullType(
+              BuiltList, const [const FullType(RC.RouteCoordinates)])),
+      'Active',
+      serializers.serialize(object.Active, specifiedType: const FullType(bool)),
+    ];
+
+    return result;
+  }
+
+  @override
+  BusRoute deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new BusRouteBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'Id':
+          result.Id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'Number':
+          result.Number = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'Name':
+          result.Name = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'Colour':
+          result.Colour = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'ColourInverse':
+          result.ColourInverse = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'RouteCoordinates':
+          result.RouteCoordinates.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(RC.RouteCoordinates)]))
+              as BuiltList);
+          break;
+        case 'Active':
+          result.Active = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$BusRoute extends BusRoute {
   @override
-  final int id;
+  final int Id;
   @override
-  final String number;
+  final String Number;
   @override
-  final String name;
+  final String Name;
   @override
-  final String colour;
+  final String Colour;
   @override
-  final String colourInverse;
+  final String ColourInverse;
   @override
-  final BuiltList<RouteCoordinates> routeCoordinates;
+  final BuiltList<RC.RouteCoordinates> RouteCoordinates;
   @override
-  final bool active;
+  final bool Active;
 
   factory _$BusRoute([void updates(BusRouteBuilder b)]) =>
       (new BusRouteBuilder()..update(updates)).build();
 
   _$BusRoute._(
-      {this.id,
-      this.number,
-      this.name,
-      this.colour,
-      this.colourInverse,
-      this.routeCoordinates,
-      this.active})
+      {this.Id,
+      this.Number,
+      this.Name,
+      this.Colour,
+      this.ColourInverse,
+      this.RouteCoordinates,
+      this.Active})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'id');
+    if (Id == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'Id');
     }
-    if (number == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'number');
+    if (Number == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'Number');
     }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'name');
+    if (Name == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'Name');
     }
-    if (colour == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'colour');
+    if (Colour == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'Colour');
     }
-    if (colourInverse == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'colourInverse');
+    if (ColourInverse == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'ColourInverse');
     }
-    if (routeCoordinates == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'routeCoordinates');
+    if (RouteCoordinates == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'RouteCoordinates');
     }
-    if (active == null) {
-      throw new BuiltValueNullFieldError('BusRoute', 'active');
+    if (Active == null) {
+      throw new BuiltValueNullFieldError('BusRoute', 'Active');
     }
   }
 
@@ -68,13 +152,13 @@ class _$BusRoute extends BusRoute {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is BusRoute &&
-        id == other.id &&
-        number == other.number &&
-        name == other.name &&
-        colour == other.colour &&
-        colourInverse == other.colourInverse &&
-        routeCoordinates == other.routeCoordinates &&
-        active == other.active;
+        Id == other.Id &&
+        Number == other.Number &&
+        Name == other.Name &&
+        Colour == other.Colour &&
+        ColourInverse == other.ColourInverse &&
+        RouteCoordinates == other.RouteCoordinates &&
+        Active == other.Active;
   }
 
   @override
@@ -83,24 +167,24 @@ class _$BusRoute extends BusRoute {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, id.hashCode), number.hashCode),
-                        name.hashCode),
-                    colour.hashCode),
-                colourInverse.hashCode),
-            routeCoordinates.hashCode),
-        active.hashCode));
+                    $jc($jc($jc(0, Id.hashCode), Number.hashCode),
+                        Name.hashCode),
+                    Colour.hashCode),
+                ColourInverse.hashCode),
+            RouteCoordinates.hashCode),
+        Active.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('BusRoute')
-          ..add('id', id)
-          ..add('number', number)
-          ..add('name', name)
-          ..add('colour', colour)
-          ..add('colourInverse', colourInverse)
-          ..add('routeCoordinates', routeCoordinates)
-          ..add('active', active))
+          ..add('Id', Id)
+          ..add('Number', Number)
+          ..add('Name', Name)
+          ..add('Colour', Colour)
+          ..add('ColourInverse', ColourInverse)
+          ..add('RouteCoordinates', RouteCoordinates)
+          ..add('Active', Active))
         .toString();
   }
 }
@@ -108,48 +192,48 @@ class _$BusRoute extends BusRoute {
 class BusRouteBuilder implements Builder<BusRoute, BusRouteBuilder> {
   _$BusRoute _$v;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  int _Id;
+  int get Id => _$this._Id;
+  set Id(int Id) => _$this._Id = Id;
 
-  String _number;
-  String get number => _$this._number;
-  set number(String number) => _$this._number = number;
+  String _Number;
+  String get Number => _$this._Number;
+  set Number(String Number) => _$this._Number = Number;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
+  String _Name;
+  String get Name => _$this._Name;
+  set Name(String Name) => _$this._Name = Name;
 
-  String _colour;
-  String get colour => _$this._colour;
-  set colour(String colour) => _$this._colour = colour;
+  String _Colour;
+  String get Colour => _$this._Colour;
+  set Colour(String Colour) => _$this._Colour = Colour;
 
-  String _colourInverse;
-  String get colourInverse => _$this._colourInverse;
-  set colourInverse(String colourInverse) =>
-      _$this._colourInverse = colourInverse;
+  String _ColourInverse;
+  String get ColourInverse => _$this._ColourInverse;
+  set ColourInverse(String ColourInverse) =>
+      _$this._ColourInverse = ColourInverse;
 
-  ListBuilder<RouteCoordinates> _routeCoordinates;
-  ListBuilder<RouteCoordinates> get routeCoordinates =>
-      _$this._routeCoordinates ??= new ListBuilder<RouteCoordinates>();
-  set routeCoordinates(ListBuilder<RouteCoordinates> routeCoordinates) =>
-      _$this._routeCoordinates = routeCoordinates;
+  ListBuilder<RC.RouteCoordinates> _RouteCoordinates;
+  ListBuilder<RC.RouteCoordinates> get RouteCoordinates =>
+      _$this._RouteCoordinates ??= new ListBuilder<RC.RouteCoordinates>();
+  set RouteCoordinates(ListBuilder<RC.RouteCoordinates> RouteCoordinates) =>
+      _$this._RouteCoordinates = RouteCoordinates;
 
-  bool _active;
-  bool get active => _$this._active;
-  set active(bool active) => _$this._active = active;
+  bool _Active;
+  bool get Active => _$this._Active;
+  set Active(bool Active) => _$this._Active = Active;
 
   BusRouteBuilder();
 
   BusRouteBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
-      _number = _$v.number;
-      _name = _$v.name;
-      _colour = _$v.colour;
-      _colourInverse = _$v.colourInverse;
-      _routeCoordinates = _$v.routeCoordinates?.toBuilder();
-      _active = _$v.active;
+      _Id = _$v.Id;
+      _Number = _$v.Number;
+      _Name = _$v.Name;
+      _Colour = _$v.Colour;
+      _ColourInverse = _$v.ColourInverse;
+      _RouteCoordinates = _$v.RouteCoordinates?.toBuilder();
+      _Active = _$v.Active;
       _$v = null;
     }
     return this;
@@ -174,18 +258,18 @@ class BusRouteBuilder implements Builder<BusRoute, BusRouteBuilder> {
     try {
       _$result = _$v ??
           new _$BusRoute._(
-              id: id,
-              number: number,
-              name: name,
-              colour: colour,
-              colourInverse: colourInverse,
-              routeCoordinates: routeCoordinates.build(),
-              active: active);
+              Id: Id,
+              Number: Number,
+              Name: Name,
+              Colour: Colour,
+              ColourInverse: ColourInverse,
+              RouteCoordinates: RouteCoordinates.build(),
+              Active: Active);
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'routeCoordinates';
-        routeCoordinates.build();
+        _$failedField = 'RouteCoordinates';
+        RouteCoordinates.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'BusRoute', _$failedField, e.toString());

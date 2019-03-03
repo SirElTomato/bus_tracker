@@ -6,16 +6,60 @@ part of 'route_data.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
+Serializer<RouteData> _$routeDataSerializer = new _$RouteDataSerializer();
+
+class _$RouteDataSerializer implements StructuredSerializer<RouteData> {
+  @override
+  final Iterable<Type> types = const [RouteData, _$RouteData];
+  @override
+  final String wireName = 'RouteData';
+
+  @override
+  Iterable serialize(Serializers serializers, RouteData object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'routes',
+      serializers.serialize(object.routes,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(BusRoute)])),
+    ];
+
+    return result;
+  }
+
+  @override
+  RouteData deserialize(Serializers serializers, Iterable serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new RouteDataBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'routes':
+          result.routes.replace(serializers.deserialize(value,
+              specifiedType: const FullType(
+                  BuiltList, const [const FullType(BusRoute)])) as BuiltList);
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
 class _$RouteData extends RouteData {
   @override
-  final BuiltList<BusRoute> busRoutes;
+  final BuiltList<BusRoute> routes;
 
   factory _$RouteData([void updates(RouteDataBuilder b)]) =>
       (new RouteDataBuilder()..update(updates)).build();
 
-  _$RouteData._({this.busRoutes}) : super._() {
-    if (busRoutes == null) {
-      throw new BuiltValueNullFieldError('RouteData', 'busRoutes');
+  _$RouteData._({this.routes}) : super._() {
+    if (routes == null) {
+      throw new BuiltValueNullFieldError('RouteData', 'routes');
     }
   }
 
@@ -29,18 +73,17 @@ class _$RouteData extends RouteData {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is RouteData && busRoutes == other.busRoutes;
+    return other is RouteData && routes == other.routes;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, busRoutes.hashCode));
+    return $jf($jc(0, routes.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('RouteData')
-          ..add('busRoutes', busRoutes))
+    return (newBuiltValueToStringHelper('RouteData')..add('routes', routes))
         .toString();
   }
 }
@@ -48,17 +91,16 @@ class _$RouteData extends RouteData {
 class RouteDataBuilder implements Builder<RouteData, RouteDataBuilder> {
   _$RouteData _$v;
 
-  ListBuilder<BusRoute> _busRoutes;
-  ListBuilder<BusRoute> get busRoutes =>
-      _$this._busRoutes ??= new ListBuilder<BusRoute>();
-  set busRoutes(ListBuilder<BusRoute> busRoutes) =>
-      _$this._busRoutes = busRoutes;
+  ListBuilder<BusRoute> _routes;
+  ListBuilder<BusRoute> get routes =>
+      _$this._routes ??= new ListBuilder<BusRoute>();
+  set routes(ListBuilder<BusRoute> routes) => _$this._routes = routes;
 
   RouteDataBuilder();
 
   RouteDataBuilder get _$this {
     if (_$v != null) {
-      _busRoutes = _$v.busRoutes?.toBuilder();
+      _routes = _$v.routes?.toBuilder();
       _$v = null;
     }
     return this;
@@ -81,12 +123,12 @@ class RouteDataBuilder implements Builder<RouteData, RouteDataBuilder> {
   _$RouteData build() {
     _$RouteData _$result;
     try {
-      _$result = _$v ?? new _$RouteData._(busRoutes: busRoutes.build());
+      _$result = _$v ?? new _$RouteData._(routes: routes.build());
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'busRoutes';
-        busRoutes.build();
+        _$failedField = 'routes';
+        routes.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'RouteData', _$failedField, e.toString());
