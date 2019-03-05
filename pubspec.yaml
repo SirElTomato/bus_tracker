@@ -12,6 +12,8 @@ dependencies:
 
   built_value: ^6.3.1
   built_collection: ^4.1.0
+  rxdart: ^0.20.0
+  google_maps_flutter: ^0.3.0+2
 
   cupertino_icons: ^0.1.2
 
