@@ -37,18 +37,26 @@ class MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Island Mapper"),
-        actions: <Widget>[
-          new IconButton(
-              icon: const Icon(Icons.list),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SelectRoutesPage()));
-              })
-        ],
+        // actions: <Widget>[
+        //   new IconButton(
+        //       icon: const Icon(Icons.list),
+        //       onPressed: () {
+        //         Navigator.push(
+        //             context,
+        //             MaterialPageRoute(
+        //                 builder: (context) => SelectRoutesPage()));
+        //       })
+        // ],
       ),
-      bottomNavigationBar: TabSelector(),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Select Routes"),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SelectRoutesPage()));
+        },
+        icon: Icon(Icons.show_chart),
+      ),
+      // bottomNavigationBar: TabSelector(),
       body: StoreConnector<AppState, HomePageViewModel>(
         converter: (Store<AppState> store) => HomePageViewModel.create(store),
         builder: (BuildContext context, HomePageViewModel viewModel) =>
