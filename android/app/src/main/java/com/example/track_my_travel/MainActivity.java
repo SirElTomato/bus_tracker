@@ -1,4 +1,4 @@
-package com.example.bustracker;
+package com.example.track_my_travel;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
