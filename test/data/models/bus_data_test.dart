@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:test/test.dart';
 import 'package:track_my_travel/data/models/bus_data/bus_data.dart';
 import 'package:track_my_travel/data/models/bus_data/bus_stop.dart';
 import 'package:track_my_travel/data/models/bus_data/minimum_info_update.dart';
-import 'package:track_my_travel/data/models/serializers/serializers.dart';
 
 void main() {
   test("parse bus_data json", () {

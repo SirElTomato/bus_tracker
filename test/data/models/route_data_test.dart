@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:test/test.dart';
 import 'package:track_my_travel/data/models/route_data/bus_route.dart';
 import 'package:track_my_travel/data/models/route_data/route_coordinates.dart';
 import 'package:track_my_travel/data/models/route_data/route_data.dart';
-import 'package:track_my_travel/data/models/serializers/serializers.dart';
 
 void main() {
   test("parse route_data json", () {

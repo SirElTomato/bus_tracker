@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:track_my_travel/data/models/bus_data/bus_data.dart';
-import 'package:track_my_travel/data/models/bus_data/minimum_info_update.dart';
 import 'package:track_my_travel/data/network/bus_data_source.dart';
 
 class BusDataRepository {

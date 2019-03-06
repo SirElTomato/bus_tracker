@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:test/test.dart';
 import 'package:track_my_travel/data/models/bus_data/bus_data.dart';
-import 'package:track_my_travel/data/models/serializers/serializers.dart';
 import 'package:track_my_travel/data/network/bus_data_source.dart';
 import 'package:track_my_travel/data/respository/bus_data_repository.dart';
 import 'package:mockito/mockito.dart';
