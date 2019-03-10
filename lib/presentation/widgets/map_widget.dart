@@ -53,6 +53,8 @@ class _MapWidgetState extends State<MapWidget> {
       infoWindow: InfoWindow(title: update.line, snippet: update.direction),
       rotation: update.bearing.toDouble(),
       anchor: Offset(0.5, 0.5),
+      icon: BitmapDescriptor.fromAsset(
+          "assets/bus_markers/100/${update.line}.png"),
     );
   }
 }
