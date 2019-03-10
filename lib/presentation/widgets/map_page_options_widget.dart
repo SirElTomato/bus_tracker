@@ -13,6 +13,7 @@ class _MapPageOptionsWidgetState extends State<MapPageOptionsWidget> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         FloatingActionButton(
+          heroTag: "routesButton",
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SelectRoutesPage()));
@@ -27,6 +28,7 @@ class _MapPageOptionsWidgetState extends State<MapPageOptionsWidget> {
           width: 10,
         ),
         FloatingActionButton(
+          heroTag: "stopsButton",
           onPressed: () => {},
           child: Icon(
             Icons.stop,
