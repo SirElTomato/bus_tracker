@@ -29,7 +29,7 @@ class _MapPageState extends State<MapPage> {
       floatingActionButton: MapPageOptionsWidget(
         preferencesBloc: widget.preferencesBloc,
       ),
-      body: MapWidget(_busDataBloc),
+      body: MapWidget(_busDataBloc, widget.preferencesBloc),
     );
   }
 }

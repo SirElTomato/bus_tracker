@@ -9,8 +9,6 @@ class BusDataBloc {
   BusDataRepository _busDataRepository;
   Timer timer;
 
-  List<String> selectedRoutes;
-
   final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>(
       seedValue: List<MinimumInfoUpdate>());
 
@@ -19,8 +17,7 @@ class BusDataBloc {
   var _busData = BusData();
 
   BusDataBloc(BusDataRepository busDataRepository)
-      : _busDataRepository = busDataRepository,
-        selectedRoutes = ['1', '15', '22'] {
+      : _busDataRepository = busDataRepository {
     _getBusData();
 
     timer = Timer.periodic(
@@ -32,10 +29,7 @@ class BusDataBloc {
   Future _getBusData() async {
     print('getting bus data');
     _busData = await _busDataRepository.getBusData();
-    List<MinimumInfoUpdate> filteredBusData = _busData.minimumInfoUpdates
-        .where((update) => selectedRoutes.contains(update.line))
-        .toList();
-    _busDataSubject.add(filteredBusData);
+    _busDataSubject.add(_busData.minimumInfoUpdates.toList());
   }
 
   void close() {

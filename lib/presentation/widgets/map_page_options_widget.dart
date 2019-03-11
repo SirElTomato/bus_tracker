@@ -32,18 +32,18 @@ class _MapPageOptionsWidgetState extends State<MapPageOptionsWidget> {
           ),
           backgroundColor: Colors.white,
         ),
-        SizedBox(
-          width: 10,
-        ),
-        FloatingActionButton(
-          heroTag: "stopsButton",
-          onPressed: () => {},
-          child: Icon(
-            Icons.stop,
-            color: Colors.red,
-          ),
-          backgroundColor: Colors.white,
-        )
+        // SizedBox(
+        //   width: 10,
+        // ),
+        // FloatingActionButton(
+        //   heroTag: "stopsButton",
+        //   onPressed: () => {},
+        //   child: Icon(
+        //     Icons.stop,
+        //     color: Colors.red,
+        //   ),
+        //   backgroundColor: Colors.white,
+        // )
       ],
     );
   }
