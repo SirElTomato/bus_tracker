@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:track_my_travel/blocs/preferences/preferences_bloc.dart';
+import 'package:track_my_travel/blocs/preferences/preferences_state.dart';
 import 'package:track_my_travel/blocs/route_data/route_data_bloc.dart';
 import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:track_my_travel/data/models/route_data/bus_route.dart';
 import 'package:track_my_travel/extensions.dart';
 
 class SelectRoutesPage extends StatefulWidget {
+  final PreferencesBloc preferencesBloc;
+
+  const SelectRoutesPage({Key key, this.preferencesBloc}) : super(key: key);
+
   @override
   _SelectRoutesPageState createState() => _SelectRoutesPageState();
 }
@@ -19,6 +25,8 @@ class _SelectRoutesPageState extends State<SelectRoutesPage> {
   static const edgeRight = 0.00;
   static const edgeBottom = 0.01;
   double screenWidth;
+  List<String> selectedRoutes;
+  List<BusRoute> busRoutes;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +38,25 @@ class _SelectRoutesPageState extends State<SelectRoutesPage> {
           stream: _routeDataBloc.routeData,
           initialData: List<BusRoute>(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              screenWidth = MediaQuery.of(context).size.width;
-              return _buildRouteSelector(snapshot.data);
-            }
+            busRoutes = snapshot.data;
+            return StreamBuilder<PreferencesState>(
+              stream: widget.preferencesBloc.currentPreferences,
+              initialData: PreferencesState([]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  selectedRoutes = snapshot.data.selectedRoutes;
+                  screenWidth = MediaQuery.of(context).size.width;
+                  return _buildRouteSelector();
+                }
+                return Container();
+              },
+            );
           }),
     );
   }
 
-  SingleChildScrollView _buildRouteSelector(List<BusRoute> data) {
-    List<GridTile> routeTiles = data
+  SingleChildScrollView _buildRouteSelector() {
+    List<GridTile> routeTiles = busRoutes
         .map((route) =>
             (_createRouteTile(route.Number, route.Colour, genericTileWidth)))
         .toList();
@@ -55,26 +72,48 @@ class _SelectRoutesPageState extends State<SelectRoutesPage> {
 
   GridTile _createRouteTile(
       String routeNumber, String colorInHex, double tileWidth) {
+    bool alreadySelected = selectedRoutes.contains(routeNumber);
+    bool allSelected = selectedRoutes.length == busRoutes.length;
+    double opacity = (alreadySelected || allSelected) ? 1.0 : 0.2;
+
     return GridTile(
-      child: Opacity(
-        opacity: 1,
-        child: Container(
-          child: Center(
-            child: Text(
-              routeNumber,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+      child: InkResponse(
+        enableFeedback: true,
+        onTap: () {
+          setState(() {
+            if (routeNumber == "All" && !allSelected) {
+              selectedRoutes = busRoutes.map((route) => route.Number).toList();
+            } else if (routeNumber == "All" && allSelected) {
+              selectedRoutes = [];
+            } else if (alreadySelected || allSelected) {
+              selectedRoutes.remove(routeNumber);
+            } else {
+              selectedRoutes.add(routeNumber);
+            }
+            widget.preferencesBloc.selectedRoutesPrefsController
+                .add(selectedRoutes);
+          });
+        },
+        child: Opacity(
+          opacity: opacity,
+          child: Container(
+            child: Center(
+              child: Text(
+                routeNumber,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
-          ),
-          width: tileWidth * screenWidth,
-          height: tileHeight * screenWidth,
-          margin: EdgeInsets.fromLTRB(
-              edgeLeft * screenWidth,
-              edgeTop * screenWidth,
-              edgeRight * screenWidth,
-              edgeBottom * screenWidth),
-          decoration: BoxDecoration(
-            color: HexColor(colorInHex),
-            borderRadius: BorderRadius.all(const Radius.circular(50)),
+            width: tileWidth * screenWidth,
+            height: tileHeight * screenWidth,
+            margin: EdgeInsets.fromLTRB(
+                edgeLeft * screenWidth,
+                edgeTop * screenWidth,
+                edgeRight * screenWidth,
+                edgeBottom * screenWidth),
+            decoration: BoxDecoration(
+              color: HexColor(colorInHex),
+              borderRadius: BorderRadius.all(const Radius.circular(50)),
+            ),
           ),
         ),
       ),

@@ -11,7 +11,8 @@ class BusDataBloc {
 
   List<String> selectedRoutes;
 
-  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>();
+  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>(
+      seedValue: List<MinimumInfoUpdate>());
 
   Stream<List<MinimumInfoUpdate>> get busData => _busDataSubject.stream;
 
