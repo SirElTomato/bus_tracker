@@ -4,9 +4,9 @@ import 'package:track_my_travel/injection_container.dart';
 import 'package:track_my_travel/presentation/pages/map_page.dart';
 import 'package:permission/permission.dart';
 
-void main() {
+void main() async {
   initKiwi();
-  checkPermissions();
+  await checkPermissions();
   runApp(MyApp());
 }
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Track My Travel',
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
