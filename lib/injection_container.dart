@@ -1,3 +1,5 @@
+import 'package:track_my_travel/blocs/map_page/map_page_bloc.dart';
+import 'package:track_my_travel/blocs/preferences/preferences_bloc.dart';
 import 'package:track_my_travel/blocs/route_data/route_data_bloc.dart';
 import 'package:track_my_travel/data/network/bus_data_source.dart';
 import 'package:track_my_travel/data/network/route_data_source.dart';
@@ -15,5 +17,6 @@ void initKiwi() {
     ..registerFactory((c) => BusDataBloc(c.resolve()))
     ..registerFactory((c) => RouteDataSource(c.resolve()))
     ..registerFactory((c) => RouteDataRepository(c.resolve()))
-    ..registerFactory((c) => RouteDataBloc(c.resolve()));
+    ..registerFactory((c) => RouteDataBloc(c.resolve()))
+    ..registerFactory((c) => MapPageBloc(PreferencesBloc(), c.resolve()));
 }
