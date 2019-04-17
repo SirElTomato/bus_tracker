@@ -1,16 +1,19 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
 import 'package:track_my_travel/data/models/bus_data/bus_data.dart';
 import 'package:track_my_travel/data/models/bus_data/minimum_info_update.dart';
 import 'package:track_my_travel/data/respository/bus_data_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class BusDataBloc {
+enum BusDataEvent { getBusData }
+
+class BusDataBloc
+    extends Bloc<BusDataEvent, BehaviorSubject<List<MinimumInfoUpdate>>> {
   BusDataRepository _busDataRepository;
   Timer timer;
 
-  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>(
-      seedValue: List<MinimumInfoUpdate>());
+  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>();
 
   Stream<List<MinimumInfoUpdate>> get busData => _busDataSubject.stream;
 
@@ -34,5 +37,19 @@ class BusDataBloc {
 
   void close() {
     _busDataSubject.close();
+  }
+
+  @override
+  BehaviorSubject<List<MinimumInfoUpdate>> get initialState =>
+      BehaviorSubject<List<MinimumInfoUpdate>>();
+
+  @override
+  Stream<BehaviorSubject<List<MinimumInfoUpdate>>> mapEventToState(
+      BusDataEvent event) async* {
+    switch (event) {
+      case BusDataEvent.getBusData:
+        yield _busDataSubject;
+        break;
+    }
   }
 }

@@ -1,12 +1,20 @@
 import 'dart:async';
+import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:track_my_travel/blocs/preferences/preferences_state.dart';
 
-class PreferencesBloc {
-  final _currentPreferences = BehaviorSubject<PreferencesState>(
-    seedValue: PreferencesState([]),
-  );
+class PreferencesEvent {}
+
+class GetPreferences {}
+
+class SavePreferences {
+  final 
+}
+
+class PreferencesBloc
+    extends Bloc<PreferencesEvent, BehaviorSubject<PreferencesState>> {
+  final _currentPreferences = BehaviorSubject<PreferencesState>();
 
   final selectedRoutesPrefsController = StreamController<List<String>>();
 
@@ -38,5 +46,21 @@ class PreferencesBloc {
   void close() {
     _currentPreferences.close();
     selectedRoutesPrefsController.close();
+  }
+
+  @override
+  // TODO: implement initialState
+  BehaviorSubject<PreferencesState> get initialState => currentPreferences;
+
+  @override
+  Stream<BehaviorSubject<PreferencesState>> mapEventToState(PreferencesEvent event) async* {
+    switch (event) {
+      case PreferencesEvent.getPreferences:
+        _loadSharedPreferences();
+        break;
+      case PreferencesEvent.savePreferences:
+        _saveSelectedRoutesPreferences(event)
+      
+    }
   }
 }
