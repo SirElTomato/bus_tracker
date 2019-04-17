@@ -4,8 +4,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:track_my_travel/blocs/preferences/preferences_state.dart';
 
 class PreferencesBloc {
-  final _currentPreferences = BehaviorSubject<PreferencesState>(
-    seedValue: PreferencesState([]),
+  final _currentPreferences = BehaviorSubject<PreferencesState>.seeded(
+    PreferencesState([]),
   );
 
   final selectedRoutesPrefsController = StreamController<List<String>>();

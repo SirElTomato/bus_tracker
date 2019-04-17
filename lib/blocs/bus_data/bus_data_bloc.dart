@@ -9,8 +9,8 @@ class BusDataBloc {
   BusDataRepository _busDataRepository;
   Timer timer;
 
-  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>(
-      seedValue: List<MinimumInfoUpdate>());
+  final _busDataSubject = BehaviorSubject<List<MinimumInfoUpdate>>.seeded(
+      List<MinimumInfoUpdate>());
 
   Stream<List<MinimumInfoUpdate>> get busData => _busDataSubject.stream;
 
