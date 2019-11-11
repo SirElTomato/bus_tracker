@@ -28,11 +28,10 @@ class MyApp extends StatelessWidget {
 }
 
 Future checkPermissions() async {
-  PermissionStatus locationPermission = await PermissionHandler()
-    .checkPermissionStatus(PermissionGroup.location);
+  PermissionStatus locationPermission =
+      await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
 
   if (locationPermission != PermissionStatus.granted) {
-    await PermissionHandler()
-      .requestPermissions([PermissionGroup.location]);
+    await PermissionHandler().requestPermissions([PermissionGroup.location]);
   }
 }
