@@ -10,7 +10,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="track_my_travel"
+        android:label="Track my Travel"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCdwduZcW79E86zbt5K_MBzck3xQE8tpU4"/>   
         <activity
